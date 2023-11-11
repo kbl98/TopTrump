@@ -1,0 +1,123 @@
+<p>
+  <mat-toolbar class="stretch">
+    <button mat-icon-button (click)="startGame()" class="example-icon" aria-label="Example icon-button with menu icon">
+      Neues Spiel
+    </button>
+    <span>Top Trump Heroes</span>
+    <span class="example-spacer"></span>
+    <button mat-icon-button class="example-icon favorite-icon" aria-label="Example icon-button with heart icon">
+      Meine Karten:
+    </button>
+
+    <button mat-icon-button [routerLink]="['']"  class="example-icon" aria-label="Example icon-button with share icon">
+      Exit
+    </button>
+  </mat-toolbar>
+</p>
+
+<div class="flex">
+  <mat-card class="example-card" >
+    <mat-card-header *ngIf="open1">
+      <div mat-card-avatar class="example-header-image"></div>
+      <mat-card-title>{{cards_1[0]?.name}}</mat-card-title>
+      <mat-card-subtitle>Der Starke</mat-card-subtitle>
+    </mat-card-header>
+    <img *ngIf="open1" mat-card-image src="https://material.angular.io/assets/img/examples/shiba2.jpg" alt="Photo of a Shiba Inu">
+    <mat-card-content *ngIf="open1">
+      <div (click)="log('Kraft')">
+      <p>
+       Kraft:
+      </p>
+      <p >
+        120
+       </p>
+    </div>
+    <div (click)="log('Fähigkeit')">
+      <p>
+        Fähigkeit:
+       </p>
+       <p>
+        50
+       </p>
+      </div>
+      <div (click)="log('Grösse')">
+       <p>
+        Grösse:
+       </p>
+       <p>
+        122
+       </p>
+      </div>
+      <div (click)="log('List')">
+       <p>
+        List:
+       </p>
+       <p>
+        7
+       </p>
+      </div>
+      <div (click)="log('Vertrauen')">
+       <p>
+        Vertrauen:
+       </p>
+       <p>
+        10
+       </p>
+      </div>
+    </mat-card-content>
+
+  </mat-card>
+  <mat-card class="example-card" >
+    <mat-card-header *ngIf="open2">
+      <div mat-card-avatar class="example-header-image"></div>
+      <mat-card-title>Zeus</mat-card-title>
+      <mat-card-subtitle>Göttervater</mat-card-subtitle>
+    </mat-card-header>
+    <img *ngIf="open2" mat-card-image src="https://material.angular.io/assets/img/examples/shiba2.jpg" alt="Photo of a Shiba Inu">
+    <mat-card-content *ngIf="open2">
+      <div>
+        <p>
+         Kraft:
+        </p>
+        <p >
+          84
+         </p>
+      </div>
+      <div>
+        <p>
+          Fähigkeit:
+         </p>
+         <p >
+          120
+         </p>
+        </div>
+        <div>
+         <p>
+          Grösse:
+         </p>
+         <p >
+          110
+         </p>
+        </div>
+        <div>
+         <p>
+          List:
+         </p>
+         <p>
+          10
+         </p>
+        </div>
+        <div>
+         <p>
+          Vertrauen:
+         </p>
+         <p>
+          12
+         </p>
+        </div>
+    </mat-card-content>
+
+  </mat-card>
+</div>
+
+<app-winnerscreen [winner]="winner" *ngIf="winner"></app-winnerscreen>

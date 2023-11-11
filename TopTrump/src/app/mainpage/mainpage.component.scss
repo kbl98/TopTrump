@@ -1,0 +1,38 @@
+.stretch{
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  background-color: black;
+  color: whitesmoke;
+}
+
+.flex{
+  display:flex;
+  justify-content: space-around;
+}
+
+mat-card{
+  height:700px;
+  width:500px;
+  background-color: blanchedalmond;
+}
+
+mat-card-content{
+  display:flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+  div{
+    display: flex;
+  }
+}
+
+app-winnerscreen{
+  position:absolute;
+  height:60vh;
+  width:80vh;
+  background-color: antiquewhite;
+  opacity: 0.8;
+  top:50px;
+  
+}

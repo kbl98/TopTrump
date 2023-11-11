@@ -1,1 +1,40 @@
 /* You can add global styles to this file, and also import other style files */
+
+html, body { height: 100%; }
+body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif;background-image:url("/assets/imgs/background.jpg");background-position:center;font-family:'Franklin Gothic Medium', 'Arial Narrow' !important }
+h1{
+  font-size: 64px !important;
+  color:rgb(193, 63, 15)
+}
+h2{
+  font-size: 64px;
+  color:silver;
+}
+h3{
+  font-size: 48px;
+  color:silver;
+}
+h4{
+  font-size:32px;
+  color:silver;
+}
+
+p{
+  font-size:24px;
+  color:silver;
+}
+
+.pd{
+  padding: left 24px;
+  padding-right: 24px;
+}
+
+.center{
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+  height: 100vh;
+}
+
+
