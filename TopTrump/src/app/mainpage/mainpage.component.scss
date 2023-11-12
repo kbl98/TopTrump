@@ -57,6 +57,11 @@ app-winnerscreen{
 
 }
 
+.hover-background:hover {
+  background-color: rgba(255, 192, 203, 0.406);
+  cursor: pointer;
+}
+
 app-mycards{
   position: absolute;
   top:160px;

@@ -1,17 +1,22 @@
 import { Component } from '@angular/core';
 import {MatToolbarModule} from '@angular/material/toolbar';
 import {MatIconModule} from '@angular/material/icon';
+import {MatDialog, MatDialogRef, MatDialogModule} from '@angular/material/dialog';
+import {MatButtonModule} from '@angular/material/button';
+import { MycardsComponent } from '../mycards/mycards.component';
 
 @Component({
   selector: 'app-mainpage',
   templateUrl: './mainpage.component.html',
-  styleUrls: ['./mainpage.component.scss']
+  styleUrls: ['./mainpage.component.scss'],
+
+
 })
 export class MainpageComponent{
-  constructor(){
+  constructor(public dialog: MatDialog) {
 
   }
-  cards=[{"name":"1","subname":"Der Dicke","Kraft":"1","Faehigkeit":"2","Groesse":"3","List":"4","Vertrauen":"5","png":"./assets/imgs/pinky.png"},{"name":"2","subname":"Der Göttervater","Kraft":"6","Faehigkeit":"7","Groesse":"8","List":"9","Vertrauen":"10","png":"./assets/imgs/dragy.png"},{"name":"3","subname":"Der Beständige","Kraft":"11","Faehigkeit":"12","Groesse":"13","List":"14","Vertrauen":"15","png":"./assets/imgs/greeny.png"},{"name":"4","subname":"Der Neue","Kraft":"16","Faehigkeit":"17","Groesse":"18","List":"19","Vertrauen":"20","png":"./assets/imgs/yelli.png"}]
+  cards=[{"name":"1","subname":"Der Dicke","Kraft":"1","Faehigkeit":"2","Groesse":"3","List":"4","Vertrauen":"5","png":"./assets/imgs/pinky.png"},{"name":"2","subname":"Der Göttervater","Kraft":"2","Faehigkeit":"7","Groesse":"8","List":"9","Vertrauen":"10","png":"./assets/imgs/dragy.png"},{"name":"3","subname":"Der Beständige","Kraft":"1","Faehigkeit":"7","Groesse":"13","List":"14","Vertrauen":"15","png":"./assets/imgs/greeny.png"},{"name":"4","subname":"Der Neue","Kraft":"1","Faehigkeit":"17","Groesse":"18","List":"19","Vertrauen":"20","png":"./assets/imgs/yelli.png"}]
   cards_1:any=[];
   cards_2:any=[];
   open2=false;
@@ -23,7 +28,9 @@ export class MainpageComponent{
   infoText="Starte Spiel - oben links";
   PCIsactive=false;
   move=false;
-  cardview=0;
+  equalCards:any=[]
+  equal=false;
+  cardview:any=false
 
 
 
@@ -33,6 +40,7 @@ export class MainpageComponent{
     this.open2=false;
     this.winner="";
     this.active=true;
+    this.PCIsactive=false;
     this.infoText="Waehle die Eigenschaft Deiner (linken) Karte, mit der Du vergleichen möchtest.."
   }
 
@@ -71,13 +79,13 @@ checkCards(skill:string){
   this.infoText="Der PC kat "+ skill + this.cards_2[0][skill]+" gewählt. Du hast hier"+ this.cards_1[0][skill]+"."
   }
   if (Number(this.cards_1[0][skill])>Number(this.cards_2[0][skill])){
-
+    this.pushEqualCards(this.cards_1)
     //TextINFO!!!
     this.infoText+=this.cards_1[0][skill]+" ist grösser "+this.cards_2[0][skill]
     this.PCIsactive=false;
     this.open2=true;
 
-    this.active=true;
+    //this.active=true;
     this.move=true;
 
     //this.moveCards(this.cards_1,this.cards_2)
@@ -87,7 +95,8 @@ checkCards(skill:string){
     this.infoText+="Du hast gestochen";
     this.pcChoice="";
     this.checkWinner();
-  }else{
+  }else if (Number(this.cards_2[0][skill])>Number(this.cards_1[0][skill])){
+    this.pushEqualCards(this.cards_2)
     this.open2=true;
     this.infoText+=this.cards_2[0][skill]+" ist grösser "+this.cards_1[0][skill]
     //this.moveCards(this.cards_2,this.cards_1)
@@ -102,6 +111,18 @@ checkCards(skill:string){
     this.PCIsactive=true;
     //this.computerTurn()
   }
+  }else{
+    this.infoText+=this.cards_1[0][skill]+" ist gleich"+this.cards_2[0][skill]
+    this.open2=true;
+    this.equal=true;
+    this.equalCards.push(this.cards_1[0]);
+    this.equalCards.push(this.cards_2[0]);
+    this.cards_1.shift();
+    this.cards_2.shift();
+    this.checkWinner();
+    this.checkCards(skill);
+
+
   }
 
 
@@ -111,10 +132,14 @@ checkCards(skill:string){
 
 moveCards(winner:any,loser:any){
 
+  if(winner==this.cards_1){
+  this.active=true;
+ }
   winner.push(loser[0]);
   loser.shift();
   winner.push(winner[0]);
   winner.shift();
+
   this.open2=false;
   this.move=false;
   this.infoText="";
@@ -154,12 +179,22 @@ PCactive(){
 
 }
 
-toggleCardview(){
-  if(this.cardview==0){
-    this.cardview=1
+
+pushEqualCards(winner:any){
+  for(let i:any;i<this.equalCards.length;i++){
+    winner.push(this.equalCards[i])
+  }
+  this.equalCards=[]
+}
+
+toggleCardView(){
+  console.log(this.cardview)
+  if(this.cardview==false){
+    this.cardview=true;
   }else{
-    this.cardview=0
+    this.cardview=false
   }
 }
 
 }
+

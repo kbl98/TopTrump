@@ -2,7 +2,9 @@
   display:flex;
   justify-content: space-around;
   margin:16px;
-  
+  background-color: black;
+  z-index:6;
+  opacity:1;
 }
 
 mat-card{
