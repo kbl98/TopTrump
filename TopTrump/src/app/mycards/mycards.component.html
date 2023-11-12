@@ -1,0 +1,53 @@
+
+<div class="flex" *ngFor="let card of cards" >
+  <mat-card class="example-card"  >
+    <mat-card-header >
+      <div mat-card-avatar class="example-header-image"></div>
+      <mat-card-title>{{card.name}}</mat-card-title>
+      <mat-card-subtitle>{{card.subname}}</mat-card-subtitle>
+    </mat-card-header>
+    <img mat-card-image src="{{card.png}}" >
+    <mat-card-content >
+      <div >
+      <p>
+       Kraft:
+      </p>
+      <p >
+        {{card.Kraft}}
+       </p>
+    </div>
+    <div >
+      <p>
+        Fähigkeit:
+       </p>
+       <p>
+        {{card.Faehigkeit}}
+       </p>
+      </div>
+      <div >
+       <p>
+        Grösse:
+       </p>
+       <p>
+        {{card.Groesse}}
+       </p>
+      </div>
+      <div >
+       <p>
+        List:
+       </p>
+       <p>
+        {{card.List}}
+       </p>
+      </div>
+      <div >
+       <p>
+        Vertrauen:
+       </p>
+       <p>
+        {{card.Vertrauen}}
+       </p>
+      </div>
+    </mat-card-content>
+
+  </mat-card>

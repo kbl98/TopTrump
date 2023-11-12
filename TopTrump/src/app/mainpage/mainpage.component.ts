@@ -11,16 +11,21 @@ export class MainpageComponent{
   constructor(){
 
   }
-
-  cards=[{"name":"Herkules","subname":"Der Starke","Kraft":"120","Fähigkeit":"50","Grösse":"122","List":"7","Vertrauen":"10"},{"name":"Zeus","subname":"Der Göttervater","Kraft":"110","Fähigkeit":"60","Grösse":"112","List":"10","Vertrauen":"25"},{"name":"Hera","subname":"Der Beständige","Kraft":"30","Fähigkeit":"20","Grösse":"77","List":"6","Vertrauen":"54"},{"name":"Neu","subname":"Der Neue","Kraft":"120","Fähigkeit":"50","Grösse":"122","List":"7","Vertrauen":"10"}]
+  cards=[{"name":"1","subname":"Der Dicke","Kraft":"1","Faehigkeit":"2","Groesse":"3","List":"4","Vertrauen":"5","png":"./assets/imgs/pinky.png"},{"name":"2","subname":"Der Göttervater","Kraft":"6","Faehigkeit":"7","Groesse":"8","List":"9","Vertrauen":"10","png":"./assets/imgs/dragy.png"},{"name":"3","subname":"Der Beständige","Kraft":"11","Faehigkeit":"12","Groesse":"13","List":"14","Vertrauen":"15","png":"./assets/imgs/greeny.png"},{"name":"4","subname":"Der Neue","Kraft":"16","Faehigkeit":"17","Groesse":"18","List":"19","Vertrauen":"20","png":"./assets/imgs/yelli.png"}]
   cards_1:any=[];
   cards_2:any=[];
   open2=false;
   open1=false;
   winner="";
   active=true;
-  keys=["Kraft","Fähigkeit","Grösse","List","Vertrauen"];
+  keys=["Kraft","Faehigkeit","Groesse","List","Vertrauen"];
   pcChoice="";
+  infoText="Starte Spiel - oben links";
+  PCIsactive=false;
+  move=false;
+  cardview=0;
+
+
 
   startGame(){
     this.mixCards();
@@ -28,6 +33,7 @@ export class MainpageComponent{
     this.open2=false;
     this.winner="";
     this.active=true;
+    this.infoText="Waehle die Eigenschaft Deiner (linken) Karte, mit der Du vergleichen möchtest.."
   }
 
   mixCards(){
@@ -58,43 +64,69 @@ log(skill:any){
 }
 
 checkCards(skill:string){
-  console.log("Geprüfter Skill:"+skill)
-  console.log(this.cards_2[0])
-  this.showPcCard()
-  if (this.cards_1[0][skill]>this.cards_2[0][skill]){
-    console.log(this.cards_1.length)
-    this.cards_2.shift();
-    this.cards_1.push(this.cards_2[0]);
-    this.cards_1.push(this.cards_1[0]);
-    this.cards_1.shift();
-    this.open2=false;
-    this.active=true;
-    console.log("Ich habe "+this.cards_1.length +" Karten")
-    this.pcChoice=""
-    this.checkWinner()
+  //this.showPcCard();
+  if(!this.PCIsactive){
+  this.infoText="Du hast "+ skill + this.cards_1[0][skill]+" gewählt. Der PC hat hier"+ this.cards_2[0][skill]+"."
   }else{
-    this.cards_1.shift();
-    this.cards_2.push(this.cards_2[0]);
-    this.cards_2.push(this.cards_1[0]);
-    this.cards_2.shift();
+  this.infoText="Der PC kat "+ skill + this.cards_2[0][skill]+" gewählt. Du hast hier"+ this.cards_1[0][skill]+"."
+  }
+  if (Number(this.cards_1[0][skill])>Number(this.cards_2[0][skill])){
+
+    //TextINFO!!!
+    this.infoText+=this.cards_1[0][skill]+" ist grösser "+this.cards_2[0][skill]
+    this.PCIsactive=false;
     this.open2=true;
+
+    this.active=true;
+    this.move=true;
+
+    //this.moveCards(this.cards_1,this.cards_2)
+
+
+
+    this.infoText+="Du hast gestochen";
+    this.pcChoice="";
+    this.checkWinner();
+  }else{
+    this.open2=true;
+    this.infoText+=this.cards_2[0][skill]+" ist grösser "+this.cards_1[0][skill]
+    //this.moveCards(this.cards_2,this.cards_1)
+
+    this.move=true;
     this.active=false;
     console.log("Ich habe "+this.cards_1.length +" Karten und bin nicht dran")
+    this.infoText+="Der PC hast gestochen";
+
     this.pcChoice="";
     if(!this.checkWinner()){
-    this.computerTurn()}
+    this.PCIsactive=true;
+    //this.computerTurn()
+  }
   }
 
 
 
 }
 
+
+moveCards(winner:any,loser:any){
+
+  winner.push(loser[0]);
+  loser.shift();
+  winner.push(winner[0]);
+  winner.shift();
+  this.open2=false;
+  this.move=false;
+  this.infoText="";
+  this.checkWinner();
+}
+
 checkWinner(){
-  if(this.cards_1.length==0){
+  if(this.cards_2.length==0){
     this.winner="Du hast"
     return true;
   }
-  if(this.cards_2.length==0){
+  if(this.cards_1.length==0){
     this.winner="Der Computer hat"
     return true;
   }
@@ -102,18 +134,32 @@ checkWinner(){
 }
 
 computerTurn(){
+  this.PCIsactive=true;
   let i=Math.floor(Math.random()*this.keys.length);
   this.pcChoice=this.keys[i];
   console.log("Der PC wählt:"+this.pcChoice)
-  this.checkCards(this.pcChoice);
+  this.infoText="Der PC wählt:"+this.pcChoice
+  //this.checkCards(this.pcChoice);
 
 }
 
 showPcCard(){
   this.open2=true;
-  setTimeout(()=>this.open2=false,2000)
+  setTimeout(()=>this.open2=false,5000)
 }
 
+PCactive(){
 
+  this.checkCards(this.pcChoice);
+
+}
+
+toggleCardview(){
+  if(this.cardview==0){
+    this.cardview=1
+  }else{
+    this.cardview=0
+  }
+}
 
 }

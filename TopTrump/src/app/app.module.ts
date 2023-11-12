@@ -10,6 +10,7 @@ import {MatIconModule} from '@angular/material/icon';
 import {MatToolbarModule} from '@angular/material/toolbar';
 import {MatCardModule} from '@angular/material/card';
 import { WinnerscreenComponent } from './winnerscreen/winnerscreen.component';
+import { MycardsComponent } from './mycards/mycards.component';
 
 
 @NgModule({
@@ -17,7 +18,8 @@ import { WinnerscreenComponent } from './winnerscreen/winnerscreen.component';
     AppComponent,
     StartpageComponent,
     MainpageComponent,
-    WinnerscreenComponent
+    WinnerscreenComponent,
+    MycardsComponent
   ],
   imports: [
     BrowserModule,

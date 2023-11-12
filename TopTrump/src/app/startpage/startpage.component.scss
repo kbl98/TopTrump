@@ -10,15 +10,17 @@ h1{
 }
 
 button{
-  background-color: rgb(193, 63, 15);
+  background: radial-gradient(circle, rgb(180, 77, 58) 0%, rgb(253, 185, 29) 50%, rgb(252, 176, 69) 100%);
     width: 150px;
     height: 80px;
     margin-top: 50px;
-    border-radius: 16px;
+    border-radius:100%;
     font-size: 32px;
-    color: rgba(253,185,29,1);
+    color: rgba(89,29,103,1);
+    transition: all 175ms ease-in-out;
     &:hover{
       cursor: pointer;
-      background-color: rgb(246, 100, 47);
+      background-color: rgb(183, 47, 213);
+      transform: scale(1.5);
     }
 }

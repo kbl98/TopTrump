@@ -1,0 +1,38 @@
+.flex{
+  display:flex;
+  justify-content: space-around;
+  margin:16px;
+  
+}
+
+mat-card{
+  height:700px;
+  width:500px;
+  background-color: blanchedalmond;
+  border-top-left-radius: 16px;
+  border-top-right-radius: 16px;
+
+  img{
+    width:450px;
+    height:300px;
+    object-fit: contain;
+    margin:16px;
+  }
+}
+
+mat-card-content{
+  display:flex;
+  justify-content: center;
+  align-items: flex-start;
+  flex-direction: column;
+  div{
+    display: flex;
+  }
+}
+
+.info-cont{
+  margin-top:20px;
+  background: radial-gradient(circle, rgb(180, 77, 58) 0%, rgb(253, 185, 29) 50%, rgb(252, 176, 69) 100%);
+  min-height:52px;
+    p{color:black;}
+}

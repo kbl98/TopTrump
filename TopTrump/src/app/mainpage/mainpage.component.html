@@ -5,8 +5,8 @@
     </button>
     <span>Top Trump Heroes</span>
     <span class="example-spacer"></span>
-    <button mat-icon-button class="example-icon favorite-icon" aria-label="Example icon-button with heart icon">
-      Meine Karten:
+    <button (click)="toggleCardview()" mat-icon-button class="example-icon favorite-icon" aria-label="Example icon-button with heart icon">
+      Meine Karten:{{cards_1.length}}
     </button>
 
     <button mat-icon-button [routerLink]="['']"  class="example-icon" aria-label="Example icon-button with share icon">
@@ -20,32 +20,32 @@
     <mat-card-header *ngIf="open1">
       <div mat-card-avatar class="example-header-image"></div>
       <mat-card-title>{{cards_1[0]?.name}}</mat-card-title>
-      <mat-card-subtitle>Der Starke</mat-card-subtitle>
+      <mat-card-subtitle>{{cards_1[0]?.subname}}</mat-card-subtitle>
     </mat-card-header>
-    <img *ngIf="open1" mat-card-image src="https://material.angular.io/assets/img/examples/shiba2.jpg" alt="Photo of a Shiba Inu">
+    <img *ngIf="open1" mat-card-image src="{{cards_1[0]?.png}}" alt="Photo of a Shiba Inu">
     <mat-card-content *ngIf="open1">
       <div (click)="log('Kraft')">
       <p>
        Kraft:
       </p>
       <p >
-        120
+        {{cards_1[0]?.Kraft}}
        </p>
     </div>
-    <div (click)="log('Fähigkeit')">
+    <div (click)="log('Faehigkeit')">
       <p>
         Fähigkeit:
        </p>
        <p>
-        50
+        {{cards_1[0]?.Faehigkeit}}
        </p>
       </div>
-      <div (click)="log('Grösse')">
+      <div (click)="log('Groesse')">
        <p>
         Grösse:
        </p>
        <p>
-        122
+        {{cards_1[0]?.Groesse}}
        </p>
       </div>
       <div (click)="log('List')">
@@ -53,7 +53,7 @@
         List:
        </p>
        <p>
-        7
+        {{cards_1[0]?.List}}
        </p>
       </div>
       <div (click)="log('Vertrauen')">
@@ -61,7 +61,7 @@
         Vertrauen:
        </p>
        <p>
-        10
+        {{cards_1[0]?.Vertrauen}}
        </p>
       </div>
     </mat-card-content>
@@ -70,17 +70,17 @@
   <mat-card class="example-card" >
     <mat-card-header *ngIf="open2">
       <div mat-card-avatar class="example-header-image"></div>
-      <mat-card-title>Zeus</mat-card-title>
-      <mat-card-subtitle>Göttervater</mat-card-subtitle>
+      <mat-card-title>{{cards_2[0]?.name}}</mat-card-title>
+      <mat-card-subtitle>{{cards_2[0]?.subname}}</mat-card-subtitle>
     </mat-card-header>
-    <img *ngIf="open2" mat-card-image src="https://material.angular.io/assets/img/examples/shiba2.jpg" alt="Photo of a Shiba Inu">
+    <img *ngIf="open2" mat-card-image src="{{cards_2[0]?.png}}" alt="Photo of a Shiba Inu">
     <mat-card-content *ngIf="open2">
       <div>
         <p>
          Kraft:
         </p>
         <p >
-          84
+          {{cards_2[0]?.Kraft}}
          </p>
       </div>
       <div>
@@ -88,7 +88,7 @@
           Fähigkeit:
          </p>
          <p >
-          120
+          {{cards_2[0]?.Faehigkeit}}
          </p>
         </div>
         <div>
@@ -96,7 +96,7 @@
           Grösse:
          </p>
          <p >
-          110
+          {{cards_2[0]?.Groesse}}
          </p>
         </div>
         <div>
@@ -104,7 +104,7 @@
           List:
          </p>
          <p>
-          10
+          {{cards_2[0]?.List}}
          </p>
         </div>
         <div>
@@ -112,12 +112,21 @@
           Vertrauen:
          </p>
          <p>
-          12
+          {{cards_2[0]?.Vertrauen}}
          </p>
         </div>
     </mat-card-content>
 
   </mat-card>
 </div>
+<div class="info-cont">
+  <p>{{infoText}}</p>
+</div>
+<button (click)="PCactive()" *ngIf="pcChoice && !move && !active && !winner">Auswerten.. </button>
+<button (click)="computerTurn()" *ngIf="!pcChoice && !move && PCIsactive && !winner">PC überlege.. </button>
+<button (click)="moveCards(this.cards_1,this.cards_2)" *ngIf="move && !PCIsactive && !winner">Nächste Runde (Ich) </button>
+<button (click)="moveCards(this.cards_2,this.cards_1)" *ngIf="move && PCIsactive && !winner">Nächste Runde(PC) </button>
 
 <app-winnerscreen [winner]="winner" *ngIf="winner"></app-winnerscreen>
+<!--<app-mycards [ngStyle]="{'opacity':cardview}" class="mycards" [cards]="cards_1" *ngIf="cards_1.length<4"></app-mycards>
+-->
