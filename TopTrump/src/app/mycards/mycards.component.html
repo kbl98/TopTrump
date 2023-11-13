@@ -1,6 +1,6 @@
 
 <div class="flex" *ngFor="let card of cards" >
-  <mat-card class="example-card"  >
+  <mat-card class="example-card" (click)="firstCard(card)" >
     <mat-card-header >
       <div mat-card-avatar class="example-header-image"></div>
       <mat-card-title>{{card.name}}</mat-card-title>

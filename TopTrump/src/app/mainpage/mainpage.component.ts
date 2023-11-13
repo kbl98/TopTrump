@@ -16,7 +16,7 @@ export class MainpageComponent{
   constructor(public dialog: MatDialog) {
 
   }
-  cards=[{"name":"1","subname":"Der Dicke","Kraft":"1","Faehigkeit":"2","Groesse":"3","List":"4","Vertrauen":"5","png":"./assets/imgs/pinky.png"},{"name":"2","subname":"Der Göttervater","Kraft":"2","Faehigkeit":"7","Groesse":"8","List":"9","Vertrauen":"10","png":"./assets/imgs/dragy.png"},{"name":"3","subname":"Der Beständige","Kraft":"1","Faehigkeit":"7","Groesse":"13","List":"14","Vertrauen":"15","png":"./assets/imgs/greeny.png"},{"name":"4","subname":"Der Neue","Kraft":"1","Faehigkeit":"17","Groesse":"18","List":"19","Vertrauen":"20","png":"./assets/imgs/yelli.png"}]
+  cards=[{"name":"1","subname":"Der Dicke","Kraft":"1","Faehigkeit":"2","Groesse":"3","List":"4","Vertrauen":"5","png":"./assets/imgs/pinky.png"},{"name":"2","subname":"Der Göttervater","Kraft":"2","Faehigkeit":"7","Groesse":"8","List":"9","Vertrauen":"10","png":"./assets/imgs/dragy.png"},{"name":"3","subname":"Der Beständige","Kraft":"1","Faehigkeit":"7","Groesse":"13","List":"14","Vertrauen":"15","png":"./assets/imgs/greeny.png"},{"name":"4","subname":"Der Neue","Kraft":"1","Faehigkeit":"17","Groesse":"18","List":"19","Vertrauen":"20","png":"./assets/imgs/yelli.png"},{"name":"1","subname":"Der Dicke","Kraft":"3","Faehigkeit":"6","Groesse":"11","List":"0","Vertrauen":"30","png":"./assets/imgs/reh.png"},{"name":"1","subname":"Der Dicke","Kraft":"5","Faehigkeit":"12","Groesse":"8","List":"5","Vertrauen":"25","png":"./assets/imgs/wildy.png"}]
   cards_1:any=[];
   cards_2:any=[];
   open2=false;

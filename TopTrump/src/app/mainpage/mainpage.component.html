@@ -1,9 +1,10 @@
+<div class="cont-main">
 <p>
   <mat-toolbar class="stretch">
     <button mat-icon-button (click)="startGame()" class="example-icon" aria-label="Example icon-button with menu icon">
       Neues Spiel
     </button>
-    <span>Top Trump Heroes</span>
+    <span>My Poke Top Trump</span>
     <span class="example-spacer"></span>
     <button  mat-icon-button (click)="toggleCardView()" class="example-icon favorite-icon" aria-label="Example icon-button with heart icon">
       Meine Karten:{{cards_1.length}}
@@ -16,14 +17,14 @@
 </p>
 
 <div class="flex">
-  <mat-card class="example-card" >
-    <mat-card-header *ngIf="open1">
+  <mat-card class="card-cont" >
+    <mat-card-header class="header-card" *ngIf="open1">
       <div mat-card-avatar class="example-header-image"></div>
       <mat-card-title>{{cards_1[0]?.name}}</mat-card-title>
       <mat-card-subtitle>{{cards_1[0]?.subname}}</mat-card-subtitle>
     </mat-card-header>
     <img *ngIf="open1" mat-card-image src="{{cards_1[0]?.png}}" alt="Photo of a Shiba Inu">
-    <mat-card-content *ngIf="open1">
+    <mat-card-content class="card-content"*ngIf="open1">
       <div (click)="log('Kraft')" [ngClass]="{'hover-background': active}">
       <p>
        Kraft:
@@ -67,8 +68,8 @@
     </mat-card-content>
 
   </mat-card>
-  <mat-card class="example-card" >
-    <mat-card-header *ngIf="open2">
+  <mat-card class="card-cont" >
+    <mat-card-header class="header-card" *ngIf="open2">
       <div mat-card-avatar class="example-header-image"></div>
       <mat-card-title>{{cards_2[0]?.name}}</mat-card-title>
       <mat-card-subtitle>{{cards_2[0]?.subname}}</mat-card-subtitle>
@@ -121,12 +122,13 @@
 </div>
 <div class="info-cont">
   <p>{{infoText}}</p>
+  <button class="button" (click)="PCactive()" *ngIf="pcChoice && !move && !active && !winner">Auswerten.. </button>
+<button  (click)="computerTurn()" *ngIf="!pcChoice && !move && PCIsactive && !winner">PC überlege.. </button>
+<button  (click)="moveCards(this.cards_1,this.cards_2)" *ngIf="move && !PCIsactive && !winner">Nächste Runde (Ich) </button>
+<button  (click)="moveCards(this.cards_2,this.cards_1)" *ngIf="move && PCIsactive && !winner">Nächste Runde(PC) </button>
+
 </div>
-<button (click)="PCactive()" *ngIf="pcChoice && !move && !active && !winner">Auswerten.. </button>
-<button (click)="computerTurn()" *ngIf="!pcChoice && !move && PCIsactive && !winner">PC überlege.. </button>
-<button (click)="moveCards(this.cards_1,this.cards_2)" *ngIf="move && !PCIsactive && !winner">Nächste Runde (Ich) </button>
-<button (click)="moveCards(this.cards_2,this.cards_1)" *ngIf="move && PCIsactive && !winner">Nächste Runde(PC) </button>
 
 <app-winnerscreen [winner]="winner" *ngIf="winner"></app-winnerscreen>
 <app-mycards *ngIf="cardview" class="mycards" [cards]="cards_1" ></app-mycards>
-
+</div>
