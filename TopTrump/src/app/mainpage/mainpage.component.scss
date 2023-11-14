@@ -1,100 +1,106 @@
-.cont-main{
+.cont-main {
   display: flex;
-    flex-direction: column;
-    justify-content: space-between;
-    align-items: stretch;
-    height: 100%;
+  flex-direction: column;
+  justify-content: space-between;
+  align-items: stretch;
+  height: 100%;
 }
 
-.card-cont{
-
-border:1px solid black;
-box-shadow: 1px 2px 1px 2px grey;
+.card-cont {
+  border: 1px solid black;
+  box-shadow: 1px 2px 1px 2px grey;
 }
 
-.stretch{
+.stretch {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  background-color: rgba(191, 188, 188,0.5);
+  background-color: rgba(191, 188, 188, 0.5);
   color: whitesmoke;
 }
 
-.flex{
-  display:flex;
+.flex {
+  display: flex;
   justify-content: space-around;
 }
 
-mat-card{
-  height:700px;
-  width:500px;
-  background-color: rgba(89,29,103,1);
+mat-card {
+  height: 700px;
+  width: 500px;
+  background-color: rgba(89, 29, 103, 1);
   border-top-left-radius: 16px;
   border-top-right-radius: 16px;
-  .header-card{
-  background-color: silver;
+  .header-card {
+    background-color: silver;
   }
-  img{
-    width:100%;
-    height:300px;
+  img {
+    width: 100%;
+    height: 300px;
     object-fit: contain;
     border-bottom: 1px solid black;
     border-bottom-left-radius: 12px;
     border-bottom-right-radius: 12px;
     background-color: silver;
-
   }
 }
 
-mat-card-content{
-  display:flex;
+mat-card-content {
+  display: flex;
   justify-content: center;
   align-items: flex-start;
   flex-direction: column;
   height: 100%;
-  margin-top:-10px;
-    padding-bottom: 0 !important;
-    background-color: white;
-  div{
+  margin-top: -10px;
+  padding-bottom: 0 !important;
+  background-color: white;
+  div {
     display: flex;
   }
 }
 
-.info-cont{
-  margin-top:20px;
+.info-cont {
+  margin-top: 20px;
   background-color: rgba(191, 188, 188, 0.5);
   //background: radial-gradient(circle, rgb(180, 77, 58) 0%, rgb(253, 185, 29) 50%, rgb(252, 176, 69) 100%);
-  min-height:52px;
+  min-height: 52px;
   display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    p{color:black;}
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  p {
+    color: black;
+  }
 }
 
-app-winnerscreen{
-  position:absolute;
-  height:60vh;
-  width:80vw;
+app-winnerscreen {
+  position: absolute;
+  height: 60vh;
+  width: 80vw;
   background-color: antiquewhite;
   opacity: 0.9;
-  top:50px;
-  left:10vw;
-  color:black;
-
-
-
-
+  top: 50px;
+  left: 10vw;
+  color: black;
 }
 
-button{
+button {
   border-radius: 8px !important;
   padding: 8px !important;
   font-size: 22px !important;
-  background: radial-gradient(circle, rgb(180, 77, 58) 0%, rgb(253, 185, 29) 50%, rgb(252, 176, 69) 100%);
-  &:hover{
-    cursor:pointer;
-    background-color: radial-gradient(circle, rgb(213, 85, 63) 0%, rgb(250, 193, 61) 50%, rgb(245, 187, 106) 100%); ;
+  background: radial-gradient(
+    circle,
+    rgb(180, 77, 58) 0%,
+    rgb(253, 185, 29) 50%,
+    rgb(252, 176, 69) 100%
+  );
+  &:hover {
+    cursor: pointer;
+    background-color: radial-gradient(
+      circle,
+      rgb(213, 85, 63) 0%,
+      rgb(250, 193, 61) 50%,
+      rgb(245, 187, 106) 100%
+    );
   }
 }
 
@@ -103,16 +109,78 @@ button{
   cursor: pointer;
 }
 
-app-mycards{
+app-mycards {
   position: absolute;
-  top:160px;
-  width:90vw;
-  left:5vw;
+  background-color: rgba(6, 6, 78, 0.5);
+  width: 100vw;
   display: flex;
-
-    flex-wrap: wrap;
-    justify-content: center;
-    align-items: center;
-
+  height: 100vh;
+  flex-wrap: wrap;
+  justify-content: center;
+  align-items: center;
+  animation: slidein;
+  animation-duration: 1000ms;
 }
 
+@keyframes slidein {
+  from {
+    transform: translateX(-100%);
+  }
+
+  to {
+    transform: translateX(0%);
+  }
+}
+
+@media screen and (max-width: 1200px) {
+  mat-card {
+    height: 500px;
+    width: 300px;
+    img {
+      width: 100%;
+      height: 200px;
+    }
+  }
+}
+@media screen and (max-width: 900px) {
+  mat-card {
+    height: 430px;
+    width: 250px;
+    img {
+      width: 100%;
+      height: 170px;
+    }
+  }
+  button {
+    font-size: 18px !important;
+    padding: 4px !important;
+  }
+}
+@media screen and (max-width: 600px) {
+  mat-card {
+    height: 300px;
+    width: 150px;
+    img {
+      width: 100%;
+      height: 100px;
+    }
+  }
+  button {
+    font-size: 16px !important;
+  }
+  span {
+    display: none;
+  }
+}
+
+@media screen and (max-width: 350px) {
+  .flex {
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+  }
+
+  mat-card {
+    margin-top: 16px;
+  }
+}

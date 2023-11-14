@@ -1,134 +1,169 @@
 <div class="cont-main">
-<p>
-  <mat-toolbar class="stretch">
-    <button mat-icon-button (click)="startGame()" class="example-icon" aria-label="Example icon-button with menu icon">
-      Neues Spiel
-    </button>
-    <span>My Poke Top Trump</span>
-    <span class="example-spacer"></span>
-    <button  mat-icon-button (click)="toggleCardView()" class="example-icon favorite-icon" aria-label="Example icon-button with heart icon">
-      Meine Karten:{{cards_1.length}}
-    </button>
+  <p>
+    <mat-toolbar class="stretch">
+      <button
+        mat-icon-button
+        (click)="startGame()"
+        class="example-icon"
+        aria-label="Example icon-button with menu icon"
+      >
+        Neues Spiel
+      </button>
+      <span>My Poke Top Trump</span>
+      <span class="example-spacer"></span>
+      <button
+        mat-icon-button
+        (click)="toggleCardView()"
+        class="example-icon favorite-icon"
+        aria-label="Example icon-button with heart icon"
+      >
+        Meine Karten:{{ cards_1.length }}
+      </button>
 
-    <button mat-icon-button [routerLink]="['']"  class="example-icon" aria-label="Example icon-button with share icon">
-      Exit
-    </button>
-  </mat-toolbar>
-</p>
+      <button
+        mat-icon-button
+        [routerLink]="['']"
+        class="example-icon"
+        aria-label="Example icon-button with share icon"
+      >
+        Exit
+      </button>
+    </mat-toolbar>
+  </p>
 
-<div class="flex">
-  <mat-card class="card-cont" >
-    <mat-card-header class="header-card" *ngIf="open1">
-      <div mat-card-avatar class="example-header-image"></div>
-      <mat-card-title>{{cards_1[0]?.name}}</mat-card-title>
-      <mat-card-subtitle>{{cards_1[0]?.subname}}</mat-card-subtitle>
-    </mat-card-header>
-    <img *ngIf="open1" mat-card-image src="{{cards_1[0]?.png}}" alt="Photo of a Shiba Inu">
-    <mat-card-content class="card-content"*ngIf="open1">
-      <div (click)="log('Kraft')" [ngClass]="{'hover-background': active}">
-      <p>
-       Kraft:
-      </p>
-      <p >
-        {{cards_1[0]?.Kraft}}
-       </p>
-    </div>
-    <div (click)="log('Faehigkeit')" [ngClass]="{'hover-background': active}">
-      <p>
-        Fähigkeit:
-       </p>
-       <p>
-        {{cards_1[0]?.Faehigkeit}}
-       </p>
-      </div>
-      <div (click)="log('Groesse')" [ngClass]="{'hover-background': active}">
-       <p>
-        Grösse:
-       </p>
-       <p>
-        {{cards_1[0]?.Groesse}}
-       </p>
-      </div>
-      <div (click)="log('List')" [ngClass]="{'hover-background': active}">
-       <p>
-        List:
-       </p>
-       <p>
-        {{cards_1[0]?.List}}
-       </p>
-      </div>
-      <div (click)="log('Vertrauen')" [ngClass]="{'hover-background': active}">
-       <p>
-        Vertrauen:
-       </p>
-       <p>
-        {{cards_1[0]?.Vertrauen}}
-       </p>
-      </div>
-    </mat-card-content>
-
-  </mat-card>
-  <mat-card class="card-cont" >
-    <mat-card-header class="header-card" *ngIf="open2">
-      <div mat-card-avatar class="example-header-image"></div>
-      <mat-card-title>{{cards_2[0]?.name}}</mat-card-title>
-      <mat-card-subtitle>{{cards_2[0]?.subname}}</mat-card-subtitle>
-    </mat-card-header>
-    <img *ngIf="open2" mat-card-image src="{{cards_2[0]?.png}}" alt="Photo of a Shiba Inu">
-    <mat-card-content *ngIf="open2">
-      <div>
-        <p>
-         Kraft:
-        </p>
-        <p >
-          {{cards_2[0]?.Kraft}}
-         </p>
-      </div>
-      <div>
-        <p>
-          Fähigkeit:
-         </p>
-         <p >
-          {{cards_2[0]?.Faehigkeit}}
-         </p>
+  <div class="flex">
+    <mat-card class="card-cont">
+      <mat-card-header class="header-card" *ngIf="open1">
+        <mat-card-title>{{ cards_1[0]?.name }}</mat-card-title>
+        <mat-card-subtitle>{{ cards_1[0]?.subname }}</mat-card-subtitle>
+      </mat-card-header>
+      <img
+        *ngIf="open1"
+        mat-card-image
+        src="{{ cards_1[0]?.png }}"
+        alt="Photo of a Shiba Inu"
+      />
+      <mat-card-content class="card-content" *ngIf="open1">
+        <div (click)="log('Kraft')" [ngClass]="{ 'hover-background': active }">
+          <p>Kraft:</p>
+          <p>
+            {{ cards_1[0]?.Kraft }}
+          </p>
+        </div>
+        <div
+          (click)="log('Faehigkeit')"
+          [ngClass]="{ 'hover-background': active }"
+        >
+          <p>Fähigkeit:</p>
+          <p>
+            {{ cards_1[0]?.Faehigkeit }}
+          </p>
+        </div>
+        <div
+          (click)="log('Groesse')"
+          [ngClass]="{ 'hover-background': active }"
+        >
+          <p>Grösse:</p>
+          <p>
+            {{ cards_1[0]?.Groesse }}
+          </p>
+        </div>
+        <div (click)="log('List')" [ngClass]="{ 'hover-background': active }">
+          <p>List:</p>
+          <p>
+            {{ cards_1[0]?.List }}
+          </p>
+        </div>
+        <div
+          (click)="log('Vertrauen')"
+          [ngClass]="{ 'hover-background': active }"
+        >
+          <p>Vertrauen:</p>
+          <p>
+            {{ cards_1[0]?.Vertrauen }}
+          </p>
+        </div>
+      </mat-card-content>
+    </mat-card>
+    <mat-card class="card-cont">
+      <mat-card-header class="header-card" *ngIf="open2">
+        <mat-card-title>{{ cards_2[0]?.name }}</mat-card-title>
+        <mat-card-subtitle>{{ cards_2[0]?.subname }}</mat-card-subtitle>
+      </mat-card-header>
+      <img
+        *ngIf="open2"
+        mat-card-image
+        src="{{ cards_2[0]?.png }}"
+        alt="Photo of a Shiba Inu"
+      />
+      <mat-card-content *ngIf="open2">
+        <div>
+          <p>Kraft:</p>
+          <p>
+            {{ cards_2[0]?.Kraft }}
+          </p>
         </div>
         <div>
-         <p>
-          Grösse:
-         </p>
-         <p >
-          {{cards_2[0]?.Groesse}}
-         </p>
+          <p>Fähigkeit:</p>
+          <p>
+            {{ cards_2[0]?.Faehigkeit }}
+          </p>
         </div>
         <div>
-         <p>
-          List:
-         </p>
-         <p>
-          {{cards_2[0]?.List}}
-         </p>
+          <p>Grösse:</p>
+          <p>
+            {{ cards_2[0]?.Groesse }}
+          </p>
         </div>
         <div>
-         <p>
-          Vertrauen:
-         </p>
-         <p>
-          {{cards_2[0]?.Vertrauen}}
-         </p>
+          <p>List:</p>
+          <p>
+            {{ cards_2[0]?.List }}
+          </p>
         </div>
-    </mat-card-content>
+        <div>
+          <p>Vertrauen:</p>
+          <p>
+            {{ cards_2[0]?.Vertrauen }}
+          </p>
+        </div>
+      </mat-card-content>
+    </mat-card>
+  </div>
+  <div class="info-cont">
+    <p>{{ infoText }}</p>
+    <button
+      class="button"
+      (click)="PCactive()"
+      *ngIf="pcChoice && !move && !active && !winner"
+    >
+      Auswerten..
+    </button>
+    <button
+      (click)="computerTurn()"
+      *ngIf="!pcChoice && !move && PCIsactive && !winner"
+    >
+      PC überlege..
+    </button>
+    <button
+      (click)="moveCards(this.cards_1, this.cards_2)"
+      *ngIf="move && !PCIsactive && !winner"
+    >
+      Nächste Runde (Ich)
+    </button>
+    <button
+      (click)="moveCards(this.cards_2, this.cards_1)"
+      *ngIf="move && PCIsactive && !winner"
+    >
+      Nächste Runde(PC)
+    </button>
+  </div>
 
-  </mat-card>
-</div>
-<div class="info-cont">
-  <p>{{infoText}}</p>
-  <button class="button" (click)="PCactive()" *ngIf="pcChoice && !move && !active && !winner">Auswerten.. </button>
-<button  (click)="computerTurn()" *ngIf="!pcChoice && !move && PCIsactive && !winner">PC überlege.. </button>
-<button  (click)="moveCards(this.cards_1,this.cards_2)" *ngIf="move && !PCIsactive && !winner">Nächste Runde (Ich) </button>
-<button  (click)="moveCards(this.cards_2,this.cards_1)" *ngIf="move && PCIsactive && !winner">Nächste Runde(PC) </button>
-
-</div>
-
-<app-winnerscreen [winner]="winner" *ngIf="winner"></app-winnerscreen>
-<app-mycards *ngIf="cardview" class="mycards" [cards]="cards_1" ></app-mycards>
+  <app-winnerscreen [winner]="winner" *ngIf="winner"></app-winnerscreen>
+  <app-mycards
+    *ngIf="cardview"
+    class="mycards"
+    [cards]="cards_1"
+    (click)="toggleCardView()"
+  ></app-mycards>
 </div>

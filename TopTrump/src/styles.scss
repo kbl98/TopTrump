@@ -38,4 +38,98 @@ p{
   height: 100vh;
 }
 
+@media screen and (max-width:1200px){
+  h1{
+    font-size: 54px !important;
+    color:rgba(89,29,103,1)
+  }
+  h2{
+    font-size: 44px;
+    color:silver;
+  }
+  h3{
+    font-size: 38px;
+    color:silver;
+  }
+  h4{
+    font-size:22px;
+    color:silver;
+  }
+
+  p{
+    font-size:18px;
+    color:silver;
+  }
+
+  .pd{
+    padding-left: 14px;
+    padding-right: 14px;
+  }
+
+}
+
+@media screen and (max-width:900px){
+  h1{
+    font-size: 44px !important;
+    color:rgba(89,29,103,1)
+  }
+  h2{
+    font-size: 34px;
+    color:silver;
+  }
+  h3{
+    font-size: 28px;
+    color:silver;
+  }
+  h4{
+    font-size:16px;
+    color:silver;
+  }
+
+  p{
+    font-size:16px;
+    color:silver;
+  }
+
+  .pd{
+    padding-left: 8px;
+    padding-right: 8px;
+  }
+
+}
+
+@media screen and (max-width:600px){
+  h1{
+    font-size: 26px !important;
+    color:rgba(89,29,103,1)
+  }
+  h2{
+    font-size: 24px;
+    color:silver;
+  }
+  h3{
+    font-size: 18px;
+    color:silver;
+  }
+  h4{
+    font-size:14px;
+    color:silver;
+  }
+
+  p{
+    font-size:14px;
+    color:silver;
+    margin: 0 !important;
+  }
+
+  .pd{
+    padding-left: 4px;
+    padding-right: 4px;
+  }
+
+}
+
+
+
+
 
