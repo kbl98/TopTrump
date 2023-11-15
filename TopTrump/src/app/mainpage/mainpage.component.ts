@@ -276,11 +276,11 @@ export class MainpageComponent {
 
   checkWinner() {
     if (this.cards_2.length == 0) {
-      this.winner = 'Du hast';
+      this.winner = 'Du hast ';
       return true;
     }
     if (this.cards_1.length == 0) {
-      this.winner = 'Der Computer hat';
+      this.winner = 'Der Computer hat ';
       return true;
     }
     return false;

@@ -28,14 +28,16 @@ mat-card {
   height: 700px;
   width: 500px;
   background-color: rgba(89, 29, 103, 1);
-  border-top-left-radius: 16px;
-  border-top-right-radius: 16px;
+  border-radius: 16px;
+
   .header-card {
+    border-top-left-radius: 16px;
+    border-top-right-radius: 16px;
     background-color: silver;
   }
   img {
     width: 100%;
-    height: 300px;
+    height: 267px;
     object-fit: contain;
     border-bottom: 1px solid black;
     border-bottom-left-radius: 12px;
@@ -45,6 +47,8 @@ mat-card {
 }
 
 mat-card-content {
+  border-bottom-left-radius: 16px;
+    border-bottom-right-radius: 16px;
   display: flex;
   justify-content: center;
   align-items: flex-start;
@@ -109,7 +113,7 @@ button {
   cursor: pointer;
 }
 
-app-mycards {
+/*app-mycards {
   position: absolute;
   background-color: rgba(6, 6, 78, 0.5);
   width: 100vw;
@@ -120,7 +124,32 @@ app-mycards {
   align-items: center;
   animation: slidein;
   animation-duration: 1000ms;
-}
+}*/
+
+.in{
+position: absolute;
+background-color: rgba(6, 6, 78, 0.5);
+width: 100vw;
+display: flex;
+height: 100vh;
+flex-wrap: wrap;
+justify-content: center;
+align-items: center;
+animation: slidein;
+animation-duration: 1000ms;}
+
+.out{
+  position: absolute;
+  background-color: rgba(6, 6, 78, 0.5);
+  width: 100vw;
+  display: flex;
+  height: 100vh;
+  flex-wrap: wrap;
+  justify-content: center;
+  align-items: center;
+  transform: translateX(-100%);
+  animation: slideout;
+  animation-duration: 1000ms;}
 
 @keyframes slidein {
   from {
@@ -132,13 +161,23 @@ app-mycards {
   }
 }
 
+@keyframes slideout {
+  from {
+    transform: translateX(0%);
+  }
+
+  to {
+    transform: translateX(-1000px);
+  }
+}
+
 @media screen and (max-width: 1200px) {
   mat-card {
     height: 500px;
     width: 300px;
     img {
       width: 100%;
-      height: 200px;
+      height: 190px;
     }
   }
 }
@@ -148,7 +187,7 @@ app-mycards {
     width: 250px;
     img {
       width: 100%;
-      height: 170px;
+      height: 164px;
     }
   }
   button {
@@ -162,7 +201,7 @@ app-mycards {
     width: 150px;
     img {
       width: 100%;
-      height: 100px;
+      height: 110px;
     }
   }
   button {

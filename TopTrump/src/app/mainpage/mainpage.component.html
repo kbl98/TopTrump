@@ -35,7 +35,6 @@
     <mat-card class="card-cont">
       <mat-card-header class="header-card" *ngIf="open1">
         <mat-card-title>{{ cards_1[0]?.name }}</mat-card-title>
-        <mat-card-subtitle>{{ cards_1[0]?.subname }}</mat-card-subtitle>
       </mat-card-header>
       <img
         *ngIf="open1"
@@ -88,7 +87,6 @@
     <mat-card class="card-cont">
       <mat-card-header class="header-card" *ngIf="open2">
         <mat-card-title>{{ cards_2[0]?.name }}</mat-card-title>
-        <mat-card-subtitle>{{ cards_2[0]?.subname }}</mat-card-subtitle>
       </mat-card-header>
       <img
         *ngIf="open2"
@@ -161,7 +159,8 @@
 
   <app-winnerscreen [winner]="winner" *ngIf="winner"></app-winnerscreen>
   <app-mycards
-    *ngIf="cardview"
+   
+    [ngClass]="cardview?'in':'out'"
     class="mycards"
     [cards]="cards_1"
     (click)="toggleCardView()"

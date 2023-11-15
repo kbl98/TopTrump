@@ -11,6 +11,8 @@ import {MatToolbarModule} from '@angular/material/toolbar';
 import {MatCardModule} from '@angular/material/card';
 import { WinnerscreenComponent } from './winnerscreen/winnerscreen.component';
 import { MycardsComponent } from './mycards/mycards.component';
+import { FooterComponent } from './footer/footer.component';
+import { ImpressumComponent } from './impressum/impressum.component';
 
 
 @NgModule({
@@ -19,7 +21,9 @@ import { MycardsComponent } from './mycards/mycards.component';
     StartpageComponent,
     MainpageComponent,
     WinnerscreenComponent,
-    MycardsComponent
+    MycardsComponent,
+    FooterComponent,
+    ImpressumComponent
   ],
   imports: [
     BrowserModule,
