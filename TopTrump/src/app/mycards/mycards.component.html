@@ -4,50 +4,61 @@
     <mat-card-header class="header-card">
 
       <mat-card-title>{{card.name}}</mat-card-title>
-      
+
     </mat-card-header>
-    <img mat-card-image src="{{card.png}}" >
+    <img mat-card-image [src]="card.src" >
     <mat-card-content >
       <div >
+        <p>Erfahrung:</p>
+        <p>
+          {{ card.experience }}
+        </p>
+      </div>
+      <div>
+
+      <p>Gewicht:</p>
       <p>
-       Kraft:
+        {{ card.Gewicht }}
       </p>
-      <p >
-        {{card.Kraft}}
-       </p>
     </div>
-    <div >
-      <p>
-        Fähigkeit:
-       </p>
-       <p>
-        {{card.Faehigkeit}}
-       </p>
-      </div>
-      <div >
-       <p>
-        Grösse:
-       </p>
-       <p>
-        {{card.Groesse}}
-       </p>
-      </div>
-      <div >
-       <p>
-        List:
-       </p>
-       <p>
-        {{card.List}}
-       </p>
-      </div>
-      <div >
-       <p>
-        Vertrauen:
-       </p>
-       <p>
-        {{card.Vertrauen}}
-       </p>
-      </div>
+    <div
+
+  >
+    <p>Grösse:</p>
+    <p>
+      {{ card.height }}
+    </p>
+  </div>
+  <div >
+    <p>Moves:</p>
+    <p>
+      {{ card.moves }}
+    </p>
+  </div>
+  <div >
+    <p>HP:</p>
+    <p>
+      {{ card.hp }}
+    </p>
+  </div>
+  <div >
+    <p>Attacke:</p>
+    <p>
+      {{ card.Attacke }}
+    </p>
+  </div>
+  <div>
+    <p>Verteidigung:</p>
+    <p>
+      {{ card.Verteidigung }}
+    </p>
+  </div>
+  <div>
+    <p>Geschwindigkeit:</p>
+    <p>
+      {{ card.Geschwindigkeit }}
+    </p>
+  </div>
     </mat-card-content>
 
   </mat-card>

@@ -32,56 +32,77 @@
   </p>
 
   <div class="flex">
-    <mat-card class="card-cont">
+    <mat-card class="card-cont" >
       <mat-card-header class="header-card" *ngIf="open1">
         <mat-card-title>{{ cards_1[0]?.name }}</mat-card-title>
       </mat-card-header>
       <img
         *ngIf="open1"
         mat-card-image
-        src="{{ cards_1[0]?.png }}"
+        (load)="imageLoaded = true"
+        [src]=' cards_1[0]?.src '
         alt="Photo of a Shiba Inu"
-      />
+        />
       <mat-card-content class="card-content" *ngIf="open1">
-        <div (click)="log('Kraft')" [ngClass]="{ 'hover-background': active }">
-          <p>Kraft:</p>
-          <p>
-            {{ cards_1[0]?.Kraft }}
-          </p>
-        </div>
+
         <div
-          (click)="log('Faehigkeit')"
+          (click)="log('Gewicht')"
           [ngClass]="{ 'hover-background': active }"
         >
-          <p>Fähigkeit:</p>
+          <p>Gewicht:</p>
           <p>
-            {{ cards_1[0]?.Faehigkeit }}
+            {{ cards_1[0]?.Gewicht }}
           </p>
         </div>
-        <div
-          (click)="log('Groesse')"
-          [ngClass]="{ 'hover-background': active }"
-        >
-          <p>Grösse:</p>
+
+        <div (click)="log('moves')" [ngClass]="{ 'hover-background': active }">
+          <p>Moves:</p>
           <p>
-            {{ cards_1[0]?.Groesse }}
+            {{ cards_1[0]?.moves }}
           </p>
         </div>
-        <div (click)="log('List')" [ngClass]="{ 'hover-background': active }">
-          <p>List:</p>
+        <div (click)="log('hp')" [ngClass]="{ 'hover-background': active }">
+          <p>HP:</p>
           <p>
-            {{ cards_1[0]?.List }}
+            {{ cards_1[0]?.hp }}
           </p>
         </div>
-        <div
-          (click)="log('Vertrauen')"
-          [ngClass]="{ 'hover-background': active }"
-        >
-          <p>Vertrauen:</p>
+        <div (click)="log('Attacke')" [ngClass]="{ 'hover-background': active }">
+          <p>Attacke:</p>
           <p>
-            {{ cards_1[0]?.Vertrauen }}
+            {{ cards_1[0]?.Attacke }}
           </p>
         </div>
+        <div (click)="log('Verteidigung')" [ngClass]="{ 'hover-background': active }">
+          <p>Verteidigung:</p>
+          <p>
+            {{ cards_1[0]?.Verteidigung }}
+          </p>
+        </div>
+        <div (click)="log('Spez_Attacke')" [ngClass]="{ 'hover-background': active }">
+          <p>Spez.Attacke:</p>
+          <p>
+            {{ cards_1[0]?.Spez_Attacke }}
+          </p>
+        </div>
+        <div (click)="log('Spez_Verteidigung')" [ngClass]="{ 'hover-background': active }">
+          <p>Spez.Verteidigung:</p>
+          <p>
+            {{ cards_1[0]?.Spez_Verteidigung }}
+          </p>
+        </div>
+
+
+        <div (click)="log('Geschwindigkeit')" [ngClass]="{ 'hover-background': active }">
+          <p>Geschwindigkeit:</p>
+          <p>
+            {{ cards_1[0]?.Geschwindigkeit }}
+          </p>
+        </div>
+
+
+
+
       </mat-card-content>
     </mat-card>
     <mat-card class="card-cont">
@@ -91,40 +112,62 @@
       <img
         *ngIf="open2"
         mat-card-image
-        src="{{ cards_2[0]?.png }}"
+        (load)="imageLoaded = true"
+        [src]=' cards_2[0]?.src '
         alt="Photo of a Shiba Inu"
       />
       <mat-card-content *ngIf="open2">
-        <div>
-          <p>Kraft:</p>
-          <p>
-            {{ cards_2[0]?.Kraft }}
-          </p>
-        </div>
-        <div>
-          <p>Fähigkeit:</p>
-          <p>
-            {{ cards_2[0]?.Faehigkeit }}
-          </p>
-        </div>
-        <div>
-          <p>Grösse:</p>
-          <p>
-            {{ cards_2[0]?.Groesse }}
-          </p>
-        </div>
-        <div>
-          <p>List:</p>
-          <p>
-            {{ cards_2[0]?.List }}
-          </p>
-        </div>
-        <div>
-          <p>Vertrauen:</p>
-          <p>
-            {{ cards_2[0]?.Vertrauen }}
-          </p>
-        </div>
+       <div>
+
+        <p>Gewicht:</p>
+        <p>
+          {{ cards_2[0]?.Gewicht }}
+        </p>
+      </div>
+
+    <div >
+      <p>Moves:</p>
+      <p>
+        {{ cards_2[0]?.moves }}
+      </p>
+    </div>
+    <div >
+      <p>HP:</p>
+      <p>
+        {{ cards_2[0]?.hp }}
+      </p>
+    </div>
+    <div >
+      <p>Attacke:</p>
+      <p>
+        {{ cards_2[0]?.Attacke }}
+      </p>
+    </div>
+    <div>
+      <p>Verteidigung:</p>
+      <p>
+        {{ cards_2[0]?.Verteidigung }}
+      </p>
+    </div>
+    <div >
+      <p>Spez.Attacke:</p>
+      <p>
+        {{ cards_2[0]?.Spez_Attacke }}
+      </p>
+    </div>
+    <div >
+      <p>Spez.Verteidigung:</p>
+      <p>
+        {{ cards_2[0]?.Spez_Verteidigung }}
+      </p>
+    </div>
+    <div>
+      <p>Geschwindigkeit:</p>
+      <p>
+        {{ cards_2[0]?.Geschwindigkeit }}
+      </p>
+    </div>
+
       </mat-card-content>
     </mat-card>
   </div>
@@ -159,10 +202,12 @@
 
   <app-winnerscreen [winner]="winner" *ngIf="winner"></app-winnerscreen>
   <app-mycards
-   
+
     [ngClass]="cardview?'in':'out'"
     class="mycards"
     [cards]="cards_1"
     (click)="toggleCardView()"
   ></app-mycards>
+  <app-footer></app-footer>
 </div>
+

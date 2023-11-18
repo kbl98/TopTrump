@@ -1,6 +1,7 @@
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { MatToolbarModule } from '@angular/material/toolbar';
 import { MatIconModule } from '@angular/material/icon';
+import { Observable, Observer } from 'rxjs';
 import {
   MatDialog,
   MatDialogRef,
@@ -8,16 +9,28 @@ import {
 } from '@angular/material/dialog';
 import { MatButtonModule } from '@angular/material/button';
 import { MycardsComponent } from '../mycards/mycards.component';
+import { ActivatedRoute } from '@angular/router';
 
 @Component({
   selector: 'app-mainpage',
   templateUrl: './mainpage.component.html',
   styleUrls: ['./mainpage.component.scss'],
 })
-export class MainpageComponent {
-  constructor(public dialog: MatDialog) {}
-  cards = [
-    {
+export class MainpageComponent implements OnInit {
+  constructor(
+    public dialog: MatDialog,
+    private activatedRoute: ActivatedRoute
+  ) {}
+
+  ngOnInit(): void {
+    let cards_i = this.activatedRoute.snapshot.params['cards'];
+    console.log(cards_i);
+    this.getPokeCards().subscribe(() => {});
+  }
+
+  imageLoaded: boolean = false;
+  cards: any = [
+    /*{
       name: '1',
       subname: 'Der Dicke',
       Kraft: '1',
@@ -76,7 +89,7 @@ export class MainpageComponent {
       List: '5',
       Vertrauen: '25',
       png: './assets/imgs/wildy.png',
-    },
+    },*/
   ];
   cards_1: any = [];
   cards_2: any = [];
@@ -84,16 +97,27 @@ export class MainpageComponent {
   open1 = false;
   winner = '';
   active = true;
-  keys = ['Kraft', 'Faehigkeit', 'Groesse', 'List', 'Vertrauen'];
-  pcChoice = '';
+  keys = [
+    'Gewicht',
+    'Geschwindigkeit',
+    'hp',
+    'moves',
+    'Attacke',
+    'Spez_Verteidigung',
+    'Spez_Attacke',
+    'Verteidigung'
+  ];
+  pcChoice: string = '';
   infoText = 'Starte Spiel - oben links';
   PCIsactive = false;
   move = false;
   equalCards: any = [];
   equal = false;
   cardview: any = false;
+  start_i: any = 1;
+  stop_i: any = 50;
 
-  startGame() {
+  async startGame() {
     this.mixCards();
     this.open1 = true;
     this.open2 = false;
@@ -102,6 +126,7 @@ export class MainpageComponent {
     this.PCIsactive = false;
     this.infoText =
       'Waehle die Eigenschaft Deiner (linken) Karte, mit der Du vergleichen möchtest..';
+    await this.getPokeCards();
   }
 
   mixCards() {
@@ -288,8 +313,17 @@ export class MainpageComponent {
 
   computerTurn() {
     this.PCIsactive = true;
-    let i = Math.floor(Math.random() * this.keys.length);
-    this.pcChoice = this.keys[i];
+    let max = 0;
+    let skill = '';
+    for (let key in this.cards_2[0]) {
+      if (Number(this.cards_2[0][key]) > max) {
+        max = this.cards_2[0][key];
+        skill = key;
+      }
+    }
+    this.pcChoice = skill;
+    //let i = Math.floor(Math.random() * this.keys.length);
+    //this.pcChoice = this.keys[i];
     console.log('Der PC wählt: ' + this.pcChoice);
     this.infoText = 'Der PC wählt: ' + this.pcChoice;
     //this.checkCards(this.pcChoice);
@@ -319,4 +353,85 @@ export class MainpageComponent {
       this.cardview = false;
     }
   }
+
+  /*async getPokeCards(){
+    for (let i = 1; i <= 5; i++) {
+      let url_poke =await fetch("https://pokeapi.co/api/v2/pokemon/" + i);
+      let pokemon = await url_poke.json();
+      console.log(pokemon)
+
+      console.log("Name: "+pokemon["name"])
+      //for(let j=0;j>7;j++){
+       // console.log("Zusatz:"+pokemon.stats[0]["base_stat"]["stat"]["name"]+":"+pokemon.stats[0]["base_stat"])
+     // }
+      console.log("Erfahrung: "+pokemon["base_experience"])
+      console.log("Gewicht: "+pokemon["Gewicht"])
+      console.log("Grösse: "+pokemon["height"])
+      console.log("Moves: "+pokemon["moves"].length)
+
+      console.log("Bild: "+pokemon["sprites"]["other"]["official-artwork"]["front_default"])
+      let s1=pokemon["stats"][0]["stat"]["name"]
+      let s2=pokemon["stats"][1]["stat"]["name"]
+      let s3=pokemon["stats"][2]["stat"]["name"]
+      let s4=pokemon["stats"][3]["stat"]["name"]
+      let s5=pokemon["stats"][4]["stat"]["name"]
+      let s6=pokemon["stats"][5]["stat"]["name"]
+      console.log(pokemon["stats"][0]["stat"]["name"]+":"+pokemon["stats"][0]["base_stat"])
+      let newCard:any={"name":pokemon["name"],"experience":pokemon["base_experience"],"Gewicht":pokemon["Gewicht"],"height":pokemon["height"],"moves":pokemon["moves"],s1:pokemon["stats"][0]["stat"]["name"],s2:pokemon["stats"][1]["base_stat"],s3:pokemon["stats"][2]["base_stat"],s4:pokemon["stats"][3]["base_stat"],s5:pokemon["stats"][4]["base_stat"],s6:pokemon["stats"][5]["base_stat"],"src":pokemon["sprites"]["other"]["official-artwork"]["front_default"]}
+      this.cards.push(newCard)
+      console.log(this.cards)
+    }
+
+}*/
+
+  getPokeCards(): Observable<void> {
+    return new Observable<void>((observer: Observer<void>) => {
+      const fetchPokemon = async () => {
+        let cards_i = await this.activatedRoute.snapshot.params['cards'];
+        let end = Number(cards_i) + 49;
+
+        for (let i = cards_i; i <= end; i++) {
+          let url_poke = await fetch('https://pokeapi.co/api/v2/pokemon/' + i);
+          let pokemon = await url_poke.json();
+          console.log(pokemon);
+          console.log('Name: ' + pokemon['name']);
+          //for(let j=0;j>7;j++){
+          // console.log("Zusatz:"+pokemon.stats[0]["base_stat"]["stat"]["name"]+":"+pokemon.stats[0]["base_stat"])
+          // }
+
+          console.log(
+            pokemon['stats'][0]['stat']['name'] +
+              ':' +
+              pokemon['stats'][0]['base_stat']
+          );
+          let newCard: any = {
+            name: pokemon['name'].toUpperCase(),
+            //experience: pokemon['base_experience'],
+            Gewicht: pokemon['weight'] / 10,
+            //height: pokemon['height'],
+            moves: pokemon['moves'].length,
+            hp: pokemon['stats'][0]['base_stat'],
+            Attacke: pokemon['stats'][1]['base_stat'],
+            Verteidigung: pokemon['stats'][2]['base_stat'],
+            'Spez_Attacke': pokemon['stats'][3]['base_stat'],
+            'Spez_Verteidigung': pokemon['stats'][4]['base_stat'],
+            Geschwindigkeit: pokemon['stats'][5]['base_stat'],
+            src: pokemon['sprites']['other']['official-artwork'][
+              'front_default'
+            ],
+          };
+          this.cards.push(newCard);
+          console.log(this.cards);
+
+          if (i === cards_i + 50) {
+            observer.next();
+            observer.complete();
+          }
+        }
+      };
+      fetchPokemon();
+    });
+  }
+
+  // ...
 }
