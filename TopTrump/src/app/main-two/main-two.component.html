@@ -17,12 +17,12 @@
         class="example-icon favorite-icon"
         aria-label="Example icon-button with heart icon"
       >
-        Meine Karten:{{ cards_1.length }}
+        Meine Karten:
       </button>
       <button
         mat-icon-button
-        (click)="navigateTwo()"
-        class="example-icon"
+        (click)="navigateOne()"
+        class="example-icon twoplayer"
         aria-label="Example icon-button with share icon"
       >
         2 Spieler
@@ -37,6 +37,7 @@
       </button>
     </mat-toolbar>
   </p>
+
 
   <div class="flex">
     <mat-card class="card-cont" >
@@ -217,4 +218,6 @@
   ></app-mycards>
   <app-footer></app-footer>
 </div>
+
+<app-players class="player-cont" *ngIf="!players"></app-players>
 

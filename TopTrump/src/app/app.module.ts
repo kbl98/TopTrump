@@ -13,6 +13,17 @@ import { WinnerscreenComponent } from './winnerscreen/winnerscreen.component';
 import { MycardsComponent } from './mycards/mycards.component';
 import { FooterComponent } from './footer/footer.component';
 import { ImpressumComponent } from './impressum/impressum.component';
+import { MainTwoComponent } from './main-two/main-two.component';
+import { PlayersComponent } from './players/players.component';
+import {MatInputModule} from '@angular/material/input';
+import { FormsModule } from '@angular/forms';
+import {MatCheckboxModule} from '@angular/material/checkbox';
+import {MatRadioModule} from '@angular/material/radio';
+import { initializeApp,provideFirebaseApp } from '@angular/fire/app';
+
+import { provideFirestore,getFirestore } from '@angular/fire/firestore';
+import { environment } from 'src/environments/environment';
+
 
 
 @NgModule({
@@ -23,7 +34,9 @@ import { ImpressumComponent } from './impressum/impressum.component';
     WinnerscreenComponent,
     MycardsComponent,
     FooterComponent,
-    ImpressumComponent
+    ImpressumComponent,
+    MainTwoComponent,
+    PlayersComponent
   ],
   imports: [
     BrowserModule,
@@ -32,7 +45,15 @@ import { ImpressumComponent } from './impressum/impressum.component';
     MatIconModule,
     MatToolbarModule,
     MatCardModule,
-    MatDialogModule
+    MatDialogModule,
+    MatInputModule,
+    FormsModule,
+    MatCheckboxModule,
+    MatRadioModule,
+
+    provideFirebaseApp(() => initializeApp(environment.firebase)),
+    provideFirestore(() => getFirestore())
+
 
   ],
   providers: [],

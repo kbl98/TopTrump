@@ -11,7 +11,9 @@
   box-shadow: 1px 2px 1px 2px grey;
 }
 
-
+.twoplayer{
+  background: red !important;
+}
 
 .stretch {
   display: flex;
@@ -175,6 +177,19 @@ animation-duration: 1000ms;}
   to {
     transform: translateX(-100%);
   }
+}
+
+.player-cont{
+  position:absolute;
+  top:16px;
+  right:16px;
+  left:16px;
+  background-color: rgba(0, 0, 0, 0.565);
+  height:90vh;
+  display:flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
 }
 
 @media screen and (max-width: 1200px) {

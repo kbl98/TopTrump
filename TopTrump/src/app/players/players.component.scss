@@ -1,0 +1,50 @@
+.name-cont{
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
+
+input{
+  width:200px;
+  height:60px;
+  border-radius: 6px;
+}
+
+.player-cont{
+  color:white;
+  font-size: 24px;
+  font-weight: 500;
+  display: flex;
+    align-items: center;
+    flex-direction: column;
+}
+
+.playerlist{
+  color:aqua;
+  font-size: 32px;
+  margin-top:12px;
+  &:hover{
+    background-color: purple;
+    cursor:pointer;}
+
+}
+
+.playername{
+  label{
+    color:white !important;
+  }
+}
+
+.button{
+  background-color: aqua;
+  color:white;
+  height:40px;
+  border-radius: 16px;
+  width:80px;
+  &:hover{
+    cursor:pointer;
+    background-color: rgb(17, 197, 197);
+  }
+}
+

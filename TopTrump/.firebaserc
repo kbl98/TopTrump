@@ -1,0 +1,14 @@
+{
+  "targets": {
+    "toptrump-77c45": {
+      "hosting": {
+        "TopTrump": [
+          "toptrump-77c45"
+        ]
+      }
+    }
+  },
+  "projects": {
+    "default": "toptrump-77c45"
+  }
+}

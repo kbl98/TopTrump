@@ -1,0 +1,27 @@
+<div class="name-cont">
+  <mat-form-field class="example-form-field">
+    <mat-label>Gib Deinen Name ein:</mat-label>
+    <input matInput type="text" [(ngModel)]="value"  (click)="value=' '">
+
+
+
+
+
+  </mat-form-field>
+  <button class="button"mat-stroked-button (click)="sendName()">Name loggen</button>
+</div>
+
+
+
+<section class="example-section" class="player-cont">
+  <label class="example-margin">Verfügbare Spieler - wähle einen:</label>
+  <mat-radio-group [(ngModel)]="selectedPlayer">
+    <div *ngFor="let player of players" class="playerlist" >
+      <mat-radio-button class="example-margin " value="{{player}}"><p class="playername">{{player}}</p></mat-radio-button>
+
+  </div>
+
+  </mat-radio-group>
+  <button class="button"mat-stroked-button (click)="sendInfos()">Spielen</button>
+</section>
+

@@ -1,27 +1,18 @@
 import { Component, OnInit } from '@angular/core';
-import { MatToolbarModule } from '@angular/material/toolbar';
-import { MatIconModule } from '@angular/material/icon';
-import { Observable, Observer } from 'rxjs';
-import {
-  MatDialog,
-  MatDialogRef,
-  MatDialogModule,
-} from '@angular/material/dialog';
-import { MatButtonModule } from '@angular/material/button';
-import { MycardsComponent } from '../mycards/mycards.component';
 import { ActivatedRoute, Router } from '@angular/router';
+import { Observable, Observer } from 'rxjs';
 
 @Component({
-  selector: 'app-mainpage',
-  templateUrl: './mainpage.component.html',
-  styleUrls: ['./mainpage.component.scss'],
+  selector: 'app-main-two',
+  templateUrl: './main-two.component.html',
+  styleUrls: ['./main-two.component.scss']
 })
-export class MainpageComponent implements OnInit {
-  constructor(
-    private router:Router,
-    public dialog: MatDialog,
-    private activatedRoute: ActivatedRoute
-  ) {}
+export class MainTwoComponent implements OnInit{
+  constructor(private router:Router,
+
+    private activatedRoute:ActivatedRoute){
+
+  }
 
   ngOnInit(): void {
     let cards_i = this.activatedRoute.snapshot.params['cards'];
@@ -30,68 +21,8 @@ export class MainpageComponent implements OnInit {
   }
 
   imageLoaded: boolean = false;
-  cards: any = [
-    /*{
-      name: '1',
-      subname: 'Der Dicke',
-      Kraft: '1',
-      Faehigkeit: '2',
-      Groesse: '3',
-      List: '4',
-      Vertrauen: '5',
-      png: './assets/imgs/pinky.png',
-    },
-    {
-      name: '2',
-      subname: 'Der Göttervater',
-      Kraft: '2',
-      Faehigkeit: '7',
-      Groesse: '8',
-      List: '9',
-      Vertrauen: '10',
-      png: './assets/imgs/dragy.png',
-    },
-    {
-      name: '3',
-      subname: 'Der Beständige',
-      Kraft: '1',
-      Faehigkeit: '7',
-      Groesse: '13',
-      List: '14',
-      Vertrauen: '15',
-      png: './assets/imgs/greeny.png',
-    },
-    {
-      name: '4',
-      subname: 'Der Neue',
-      Kraft: '1',
-      Faehigkeit: '17',
-      Groesse: '18',
-      List: '19',
-      Vertrauen: '20',
-      png: './assets/imgs/yelli.png',
-    },
-    {
-      name: '1',
-      subname: 'Der Dicke',
-      Kraft: '3',
-      Faehigkeit: '6',
-      Groesse: '11',
-      List: '0',
-      Vertrauen: '30',
-      png: './assets/imgs/reh.png',
-    },
-    {
-      name: '1',
-      subname: 'Der Dicke',
-      Kraft: '5',
-      Faehigkeit: '12',
-      Groesse: '8',
-      List: '5',
-      Vertrauen: '25',
-      png: './assets/imgs/wildy.png',
-    },*/
-  ];
+  cards: any = []
+  players="";
   cards_1: any = [];
   cards_2: any = [];
   open2 = false;
@@ -346,6 +277,11 @@ export class MainpageComponent implements OnInit {
     this.equalCards = [];
   }
 
+  navigateOne(){
+    let cards_i = this.activatedRoute.snapshot.params['cards'];
+    this.router.navigateByUrl('main/'+cards_i)
+  }
+
   toggleCardView() {
     console.log(this.cardview);
     if (this.cardview == false) {
@@ -355,35 +291,6 @@ export class MainpageComponent implements OnInit {
     }
   }
 
-  /*async getPokeCards(){
-    for (let i = 1; i <= 5; i++) {
-      let url_poke =await fetch("https://pokeapi.co/api/v2/pokemon/" + i);
-      let pokemon = await url_poke.json();
-      console.log(pokemon)
-
-      console.log("Name: "+pokemon["name"])
-      //for(let j=0;j>7;j++){
-       // console.log("Zusatz:"+pokemon.stats[0]["base_stat"]["stat"]["name"]+":"+pokemon.stats[0]["base_stat"])
-     // }
-      console.log("Erfahrung: "+pokemon["base_experience"])
-      console.log("Gewicht: "+pokemon["Gewicht"])
-      console.log("Grösse: "+pokemon["height"])
-      console.log("Moves: "+pokemon["moves"].length)
-
-      console.log("Bild: "+pokemon["sprites"]["other"]["official-artwork"]["front_default"])
-      let s1=pokemon["stats"][0]["stat"]["name"]
-      let s2=pokemon["stats"][1]["stat"]["name"]
-      let s3=pokemon["stats"][2]["stat"]["name"]
-      let s4=pokemon["stats"][3]["stat"]["name"]
-      let s5=pokemon["stats"][4]["stat"]["name"]
-      let s6=pokemon["stats"][5]["stat"]["name"]
-      console.log(pokemon["stats"][0]["stat"]["name"]+":"+pokemon["stats"][0]["base_stat"])
-      let newCard:any={"name":pokemon["name"],"experience":pokemon["base_experience"],"Gewicht":pokemon["Gewicht"],"height":pokemon["height"],"moves":pokemon["moves"],s1:pokemon["stats"][0]["stat"]["name"],s2:pokemon["stats"][1]["base_stat"],s3:pokemon["stats"][2]["base_stat"],s4:pokemon["stats"][3]["base_stat"],s5:pokemon["stats"][4]["base_stat"],s6:pokemon["stats"][5]["base_stat"],"src":pokemon["sprites"]["other"]["official-artwork"]["front_default"]}
-      this.cards.push(newCard)
-      console.log(this.cards)
-    }
-
-}*/
 
   getPokeCards(): Observable<void> {
     return new Observable<void>((observer: Observer<void>) => {
@@ -434,8 +341,4 @@ export class MainpageComponent implements OnInit {
     });
   }
 
-  navigateTwo(){
-    let cards_i = this.activatedRoute.snapshot.params['cards'];
-    this.router.navigateByUrl('two/'+cards_i)
-  }
 }
