@@ -37,14 +37,26 @@ input{
 }
 
 .button{
-  background-color: aqua;
+  background-color: purple;
   color:white;
   height:40px;
   border-radius: 16px;
-  width:80px;
+  width:120px;
   &:hover{
     cursor:pointer;
     background-color: rgb(17, 197, 197);
+  }
+}
+
+.exit{
+  background-color: transparent !important;
+  position:absolute;
+  right:10px;
+  bottom: 10px;
+  color:rgb(205, 61, 205);
+  &:hover{
+    cursor:pointer;
+
   }
 }
 

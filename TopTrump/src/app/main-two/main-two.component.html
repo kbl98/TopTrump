@@ -9,8 +9,19 @@
       >
         Neues Spiel
       </button>
-      <span>My Poke Top Trump</span>
-      <span class="example-spacer"></span>
+      <span *ngIf="!player">My Poke Top Trump</span>
+      <span *ngIf="!player" class="example-spacer"></span>
+      <span class="example-spacer" *ngIf="player" >Spieler:{{player}}</span>
+      <button
+      *ngIf="player && !selectedPlayer"
+        mat-icon-button
+        (click)="getPlayers()"
+        class="example-icon twoplayer"
+        aria-label="Example icon-button with share icon"
+      >
+        Gegner
+      </button>
+      <span  *ngIf="player && selectedPlayer"> Gegner:{{selectedPlayer}}</span>
       <button
         mat-icon-button
         (click)="toggleCardView()"
@@ -38,6 +49,19 @@
     </mat-toolbar>
   </p>
 
+  <section class="example-section" class="player-cont" *ngIf="playerlist">
+    <label class="example-margin">Verfügbare Spieler - wähle einen:</label>
+    <mat-radio-group [(ngModel)]="selectedPlayer">
+      <div *ngFor="let antiplayer of allPlayers" class="playerlist" >
+        <mat-radio-button class="example-margin " value="{{antiplayer}}"><p class="playername">{{antiplayer}}</p></mat-radio-button>
+
+    </div>
+
+
+    </mat-radio-group>
+    <button class="button"mat-stroked-button (click)="sendSelection()" >Spielen</button>
+  <button class="exit" (click)="exitPlayers()">X</button>
+  </section>
 
   <div class="flex">
     <mat-card class="card-cont" >
@@ -219,5 +243,5 @@
   <app-footer></app-footer>
 </div>
 
-<app-players class="player-cont" *ngIf="!players"></app-players>
+<app-players class="player-cont" *ngIf="!player"  (onPlayername)="setPlayer($event)"></app-players>
 

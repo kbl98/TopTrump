@@ -1,4 +1,4 @@
-import { Component, Input, OnInit, inject } from '@angular/core';
+import { Component, EventEmitter, Input, OnInit, Output, inject } from '@angular/core';
 import {MatIconModule} from '@angular/material/icon';
 import {MatButtonModule} from '@angular/material/button';
 import {FormsModule} from '@angular/forms';
@@ -14,6 +14,7 @@ import { collection, addDoc, setDoc,getDocs  } from "firebase/firestore";
 import 'firebase/firestore';
 import {MatDividerModule} from '@angular/material/divider';
 import { Firestore } from '@angular/fire/firestore';
+import { ActivatedRoute, Router } from '@angular/router';
 
 
 
@@ -23,19 +24,27 @@ import { Firestore } from '@angular/fire/firestore';
   styleUrls: ['./players.component.scss']
 })
 export class PlayersComponent implements OnInit{
-  constructor(private fb:Firestore){
+  constructor(private fb:Firestore,private router:Router, private activatedRoute:ActivatedRoute){
 
   }
 
   ngOnInit(): void {
 
   }
-
+  @Output() onPlayername = new EventEmitter<any>()
   value="";
   selectedPlayer="";
-  players=["Max","Leo"]
+  allPlayers:any=[];
+  player:any;
 
   async sendName(){
+    await this.getAllPlayers();
+    console.log(this.allPlayers)
+    let i=this.allPlayers.filter((p:any)=>{return this.value==p});
+    console.log(i)
+    if(i.length==0){
+
+    this.player=this.value
     console.log(this.selectedPlayer);
     const userCollection = collection(this.fb, 'user');
 
@@ -43,11 +52,21 @@ export class PlayersComponent implements OnInit{
     const newUserDocRef = await addDoc(userCollection, {
       name: this.value
     });
+    this.onPlayername.emit(this.player);
     console.log('Neuer Benutzer wurde zur "user"-Sammlung hinzugefügt. Dokument-ID:', newUserDocRef.id);
+  }else{
+    console.log("Name schon vergeben")
+    this.player=this.value;
+    this.onPlayername.emit(this.player);
   }
+}
 
-
+exit(){
+  let cards_i = this.activatedRoute.snapshot.params['cards'];
+  this.router.navigateByUrl('main/'+cards_i)
+}
   async sendInfos(){
+
 
     console.log(this.value);
 
@@ -74,7 +93,34 @@ export class PlayersComponent implements OnInit{
       } else {
         console.log('Es gibt keine Benutzer in der "user"-Sammlung.');
       }
+
     }
+
+    async getAllPlayers(){
+      const userCollection = collection(this.fb, 'user');
+
+      // Hole alle Dokumente aus der 'user'-Sammlung
+      const querySnapshot = await getDocs(userCollection);
+
+
+      // Iteriere durch jedes Dokument im querySnapshot
+      querySnapshot.forEach((doc) => {
+        // Hole die Daten des Dokuments
+        const userData = doc.data();
+
+        // Überprüfe, ob das Dokument ein "name"-Feld hat
+        if (userData && userData['name']) {
+          const userName = userData['name'];
+
+          // Füge den Namen zur Liste allPlayers hinzu
+          this.allPlayers.push(userName);
+        }
+      });
+
+      // Nachdem alle Namen abgerufen wurden, kannst du die Liste verwenden, wie du möchtest
+      console.log('Alle Benutzernamen:', this.allPlayers);
+    }
+
 
   }
 

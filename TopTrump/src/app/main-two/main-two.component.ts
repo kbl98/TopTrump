@@ -1,18 +1,29 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, Input, OnInit } from '@angular/core';
+import { Firestore } from '@angular/fire/firestore';
 import { ActivatedRoute, Router } from '@angular/router';
 import { Observable, Observer } from 'rxjs';
+import {
+  collection,
+  addDoc,
+  setDoc,
+  getDocs,
+  query,
+  where,
+  doc,
+  updateDoc,
+} from 'firebase/firestore';
 
 @Component({
   selector: 'app-main-two',
   templateUrl: './main-two.component.html',
-  styleUrls: ['./main-two.component.scss']
+  styleUrls: ['./main-two.component.scss'],
 })
-export class MainTwoComponent implements OnInit{
-  constructor(private router:Router,
-
-    private activatedRoute:ActivatedRoute){
-
-  }
+export class MainTwoComponent implements OnInit {
+  constructor(
+    private router: Router,
+    private fb: Firestore,
+    private activatedRoute: ActivatedRoute
+  ) {}
 
   ngOnInit(): void {
     let cards_i = this.activatedRoute.snapshot.params['cards'];
@@ -20,9 +31,10 @@ export class MainTwoComponent implements OnInit{
     this.getPokeCards().subscribe(() => {});
   }
 
+  @Input() players: any = [];
   imageLoaded: boolean = false;
-  cards: any = []
-  players="";
+  cards: any = [];
+
   cards_1: any = [];
   cards_2: any = [];
   open2 = false;
@@ -37,7 +49,7 @@ export class MainTwoComponent implements OnInit{
     'Attacke',
     'Spez_Verteidigung',
     'Spez_Attacke',
-    'Verteidigung'
+    'Verteidigung',
   ];
   pcChoice: string = '';
   infoText = 'Starte Spiel - oben links';
@@ -48,9 +60,19 @@ export class MainTwoComponent implements OnInit{
   cardview: any = false;
   start_i: any = 1;
   stop_i: any = 50;
+  player: any;
+  playerlist: any = false;
+  selectedPlayer = '';
+  allPlayers: any = [];
+  antiplayer: any = '';
+
+  setPlayer(player: any) {
+    this.player = player;
+  }
 
   async startGame() {
     this.mixCards();
+
     this.open1 = true;
     this.open2 = false;
     this.winner = '';
@@ -106,55 +128,9 @@ export class MainTwoComponent implements OnInit{
         '.';
     }
     this.checkMyValue(skill);
-    /*if (Number(this.cards_1[0][skill])>Number(this.cards_2[0][skill])){
-    this.pushEqualCards(this.cards_1)
-    //TextINFO!!!
-    this.infoText+=this.cards_1[0][skill]+" ist grösser "+this.cards_2[0][skill]
-    this.PCIsactive=false;
-    this.open2=true;
 
-    //this.active=true;
-    this.move=true;
-
-    //this.moveCards(this.cards_1,this.cards_2)
-
-
-
-    this.infoText+=". Du hast gestochen.";
-    this.pcChoice="";
-    this.checkWinner();
-  }*/
     this.checkPCValue(skill);
-    /*else if (Number(this.cards_2[0][skill])>Number(this.cards_1[0][skill])){
-    this.pushEqualCards(this.cards_2)
-    this.open2=true;
-    this.infoText+=this.cards_2[0][skill]+" ist grösser "+this.cards_1[0][skill]
-    //this.moveCards(this.cards_2,this.cards_1)
 
-    this.move=true;
-    this.active=false;
-    console.log("Ich habe "+this.cards_1.length +" Karten und bin nicht dran.")
-    this.infoText+=". Der PC hat gestochen.";
-
-    this.pcChoice="";
-    if(!this.checkWinner()){
-    this.PCIsactive=true;
-    //this.computerTurn()
-  }
-  }
-  else{
-    this.infoText+=this.cards_1[0][skill]+" ist gleich "+this.cards_2[0][skill]
-    this.open2=true;
-    this.equal=true;
-    this.equalCards.push(this.cards_1[0]);
-    this.equalCards.push(this.cards_2[0]);
-    this.cards_1.shift();
-    this.cards_2.shift();
-    this.checkWinner();
-    this.checkCards(skill);
-
-
-  }*/
     this.checkEqual(skill);
   }
 
@@ -277,9 +253,9 @@ export class MainTwoComponent implements OnInit{
     this.equalCards = [];
   }
 
-  navigateOne(){
+  navigateOne() {
     let cards_i = this.activatedRoute.snapshot.params['cards'];
-    this.router.navigateByUrl('main/'+cards_i)
+    this.router.navigateByUrl('main/' + cards_i);
   }
 
   toggleCardView() {
@@ -290,7 +266,6 @@ export class MainTwoComponent implements OnInit{
       this.cardview = false;
     }
   }
-
 
   getPokeCards(): Observable<void> {
     return new Observable<void>((observer: Observer<void>) => {
@@ -321,8 +296,8 @@ export class MainTwoComponent implements OnInit{
             hp: pokemon['stats'][0]['base_stat'],
             Attacke: pokemon['stats'][1]['base_stat'],
             Verteidigung: pokemon['stats'][2]['base_stat'],
-            'Spez_Attacke': pokemon['stats'][3]['base_stat'],
-            'Spez_Verteidigung': pokemon['stats'][4]['base_stat'],
+            Spez_Attacke: pokemon['stats'][3]['base_stat'],
+            Spez_Verteidigung: pokemon['stats'][4]['base_stat'],
             Geschwindigkeit: pokemon['stats'][5]['base_stat'],
             src: pokemon['sprites']['other']['official-artwork'][
               'front_default'
@@ -341,4 +316,88 @@ export class MainTwoComponent implements OnInit{
     });
   }
 
+  async getPlayers() {
+    if (this.playerlist == false) {
+      await this.getAllPlayers();
+      this.playerlist = true;
+    } else {
+      this.playerlist = false;
+    }
+  }
+
+  sendSelection() {
+    console.log('Ausgewählter Spieler wird gesendet:' + this.selectedPlayer);
+    this.playerlist = false;
+    let gameID = this.setGameID();
+  }
+
+  async getAllPlayers() {
+    const userCollection = collection(this.fb, 'user');
+
+    // Hole alle Dokumente aus der 'user'-Sammlung
+    const querySnapshot = await getDocs(userCollection);
+
+    // Iteriere durch jedes Dokument im querySnapshot
+    querySnapshot.forEach((doc) => {
+      // Hole die Daten des Dokuments
+      const userData = doc.data();
+
+      // Überprüfe, ob das Dokument ein "name"-Feld hat
+      if (userData && userData['name']) {
+        const userName = userData['name'];
+
+        // Füge den Namen zur Liste allPlayers hinzu
+        if (userName !== this.player) {
+          this.allPlayers.push(userName);
+        }
+      }
+    });
+
+    // Nachdem alle Namen abgerufen wurden, kannst du die Liste verwenden, wie du möchtest
+    console.log('Alle Benutzernamen:', this.allPlayers);
+  }
+
+  exitPlayers() {
+    this.selectedPlayer = '';
+    this.playerlist = false;
+  }
+
+  /*async getSetGame(){
+
+
+const userCollection=collection(this.fb,'user');
+const querySnapshot = await getDocs(userCollection);
+const firstDoc = querySnapshot.docs[0];
+
+      // Holen Sie sich die Daten des Dokuments
+      const userData = firstDoc.data();
+
+      // Jetzt haben Sie das gesamte JSON unter der ersten ID in der Sammlung "user"
+
+      if(!userData["gameID"]){
+        console.log('New Game for:', userData);
+      }
+
+    }*/
+
+  async setGameID() {
+    const gamesCollection = collection(this.fb, 'games');
+
+    try {
+      // Fügen Sie ein neues Dokument zur Sammlung "games" hinzu
+      const newGameRef = await addDoc(gamesCollection, {
+        /* Hier können Sie die Daten für das neue Spiel angeben */
+      });
+
+      // Holen Sie sich die ID des neu erstellten Spiels
+      const newGameId = newGameRef.id;
+
+      // Rückgabe der ID
+      console.log('GameID' + newGameId);
+      return newGameId;
+    } catch (error) {
+      console.error('Fehler beim Erstellen eines neuen Spiels:', error);
+      throw error; // Optional: Fehler weiterwerfen, um ihn in der aufrufenden Funktion zu behandeln
+    }
+  }
 }
