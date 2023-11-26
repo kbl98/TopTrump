@@ -9,10 +9,15 @@ import { MainTwoComponent } from './main-two/main-two.component';
 const routes: Routes = [
   { path: '', component: StartpageComponent },
   { path: 'impressum', component: ImpressumComponent },
+  { path: 'two/:cards/:gameID', component: MainTwoComponent,
+  children: [
+    {path:'myCards',component:MycardsComponent}
+  ]  },
   { path: 'two/:cards', component: MainTwoComponent,
   children: [
     {path:'myCards',component:MycardsComponent}
   ]  },
+
   { path: 'main/:cards', component: MainpageComponent,
   children: [
     {path:'myCards',component:MycardsComponent}

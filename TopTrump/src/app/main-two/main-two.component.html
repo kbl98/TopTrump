@@ -9,9 +9,9 @@
       >
         Neues Spiel
       </button>
-      <span *ngIf="!player">My Poke Top Trump</span>
-      <span *ngIf="!player" class="example-spacer"></span>
-      <span class="example-spacer" *ngIf="player" >Spieler:{{player}}</span>
+      <span *ngIf="!game">My Poke Top Trump</span>
+      <span *ngIf="!game" class="example-spacer"></span>
+      <!--<span class="example-spacer" *ngIf="player" >Spieler:{{player}}</span>
       <button
       *ngIf="player && !selectedPlayer"
         mat-icon-button
@@ -20,8 +20,10 @@
         aria-label="Example icon-button with share icon"
       >
         Gegner
-      </button>
-      <span  *ngIf="player && selectedPlayer"> Gegner:{{selectedPlayer}}</span>
+      </button>-->
+      <span  *ngIf="game"> Spiel-ID:{{game}}</span>
+      <span  *ngIf="me"> Ich:{{me }}</span>
+      <span  *ngIf="game"> Aktiv:{{(activePlayer | async)}}</span>
       <button
         mat-icon-button
         (click)="toggleCardView()"
@@ -49,7 +51,7 @@
     </mat-toolbar>
   </p>
 
-  <section class="example-section" class="player-cont" *ngIf="playerlist">
+ <!-- <section class="example-section" class="player-cont" *ngIf="playerlist">
     <label class="example-margin">Verfügbare Spieler - wähle einen:</label>
     <mat-radio-group [(ngModel)]="selectedPlayer">
       <div *ngFor="let antiplayer of allPlayers" class="playerlist" >
@@ -61,18 +63,18 @@
     </mat-radio-group>
     <button class="button"mat-stroked-button (click)="sendSelection()" >Spielen</button>
   <button class="exit" (click)="exitPlayers()">X</button>
-  </section>
+  </section>-->
 
   <div class="flex">
     <mat-card class="card-cont" >
       <mat-card-header class="header-card" *ngIf="open1">
-        <mat-card-title>{{ cards_1[0]?.name }}</mat-card-title>
+        <mat-card-title>{{ (cards_1 | async)?.[0]?.name }}</mat-card-title>
       </mat-card-header>
       <img
         *ngIf="open1"
         mat-card-image
         (load)="imageLoaded = true"
-        [src]=' cards_1[0]?.src '
+        [src]=" (cards_1.value && cards_1.value[0]) ? cards_1.value[0].src : '' "
         alt="Photo of a Shiba Inu"
         />
       <mat-card-content class="card-content" *ngIf="open1">
@@ -83,44 +85,44 @@
         >
           <p>Gewicht:</p>
           <p>
-            {{ cards_1[0]?.Gewicht }}
+            {{ (cards_1.value && cards_1.value[0]) ? cards_1.value[0].Gewicht : '' }}
           </p>
         </div>
 
         <div (click)="log('moves')" [ngClass]="{ 'hover-background': active }">
           <p>Moves:</p>
           <p>
-            {{ cards_1[0]?.moves }}
+            {{ (cards_1.value && cards_1.value[0]) ? cards_1.value[0].moves : '' }}
           </p>
         </div>
         <div (click)="log('hp')" [ngClass]="{ 'hover-background': active }">
           <p>HP:</p>
           <p>
-            {{ cards_1[0]?.hp }}
+            {{ (cards_1.value && cards_1.value[0]) ? cards_1.value[0].hp : '' }}
           </p>
         </div>
         <div (click)="log('Attacke')" [ngClass]="{ 'hover-background': active }">
           <p>Attacke:</p>
           <p>
-            {{ cards_1[0]?.Attacke }}
+            {{ (cards_1.value && cards_1.value[0]) ? cards_1.value[0].Attacke : '' }}
           </p>
         </div>
         <div (click)="log('Verteidigung')" [ngClass]="{ 'hover-background': active }">
           <p>Verteidigung:</p>
           <p>
-            {{ cards_1[0]?.Verteidigung }}
+            {{ (cards_1.value && cards_1.value[0]) ? cards_1.value[0].Verteidigung : '' }}
           </p>
         </div>
         <div (click)="log('Spez_Attacke')" [ngClass]="{ 'hover-background': active }">
           <p>Spez.Attacke:</p>
           <p>
-            {{ cards_1[0]?.Spez_Attacke }}
+            {{ (cards_1.value && cards_1.value[0]) ? cards_1.value[0].Spez_Attacke : '' }}
           </p>
         </div>
         <div (click)="log('Spez_Verteidigung')" [ngClass]="{ 'hover-background': active }">
           <p>Spez.Verteidigung:</p>
           <p>
-            {{ cards_1[0]?.Spez_Verteidigung }}
+            {{ (cards_1.value && cards_1.value[0]) ? cards_1.value[0].Spez_Verteidigung : '' }}
           </p>
         </div>
 
@@ -128,7 +130,7 @@
         <div (click)="log('Geschwindigkeit')" [ngClass]="{ 'hover-background': active }">
           <p>Geschwindigkeit:</p>
           <p>
-            {{ cards_1[0]?.Geschwindigkeit }}
+            {{ (cards_1.value && cards_1.value[0]) ? cards_1.value[0].Geschwindigkeit : '' }}
           </p>
         </div>
 
@@ -139,13 +141,13 @@
     </mat-card>
     <mat-card class="card-cont">
       <mat-card-header class="header-card" *ngIf="open2">
-        <mat-card-title>{{ cards_2[0]?.name }}</mat-card-title>
+        <mat-card-title>{{ (cards_2.value && cards_2.value[0]) ? cards_2.value[0].name : '' }}</mat-card-title>
       </mat-card-header>
       <img
         *ngIf="open2"
         mat-card-image
         (load)="imageLoaded = true"
-        [src]=' cards_2[0]?.src '
+        [src]="(cards_2.value && cards_2.value[0]) ? cards_2.value[0].src : ''"
         alt="Photo of a Shiba Inu"
       />
       <mat-card-content *ngIf="open2">
@@ -153,50 +155,50 @@
 
         <p>Gewicht:</p>
         <p>
-          {{ cards_2[0]?.Gewicht }}
+          {{ (cards_2.value && cards_2.value[0]) ? cards_2.value[0].Gewicht : '' }}
         </p>
       </div>
 
     <div >
       <p>Moves:</p>
       <p>
-        {{ cards_2[0]?.moves }}
+        {{ (cards_2.value && cards_2.value[0]) ? cards_2.value[0].moves : '' }}
       </p>
     </div>
     <div >
       <p>HP:</p>
       <p>
-        {{ cards_2[0]?.hp }}
+        {{ (cards_2.value && cards_2.value[0]) ? cards_2.value[0].hp : '' }}
       </p>
     </div>
     <div >
       <p>Attacke:</p>
       <p>
-        {{ cards_2[0]?.Attacke }}
+        {{ (cards_2.value && cards_2.value[0]) ? cards_2.value[0].Attacke : '' }}
       </p>
     </div>
     <div>
       <p>Verteidigung:</p>
       <p>
-        {{ cards_2[0]?.Verteidigung }}
+        {{ (cards_2.value && cards_2.value[0]) ? cards_2.value[0].Verteidigung : '' }}
       </p>
     </div>
     <div >
       <p>Spez.Attacke:</p>
       <p>
-        {{ cards_2[0]?.Spez_Attacke }}
+        {{ (cards_2.value && cards_2.value[0]) ? cards_2.value[0].Spez_Attacke : '' }}
       </p>
     </div>
     <div >
       <p>Spez.Verteidigung:</p>
       <p>
-        {{ cards_2[0]?.Spez_Verteidigung }}
+        {{ (cards_2.value && cards_2.value[0]) ? cards_2.value[0].Spez_Verteidigung : '' }}
       </p>
     </div>
     <div>
       <p>Geschwindigkeit:</p>
       <p>
-        {{ cards_2[0]?.Geschwindigkeit }}
+        {{ (cards_2.value && cards_2.value[0]) ? cards_2.value[0].Geschwindigkeit : '' }}
       </p>
     </div>
 
@@ -207,18 +209,18 @@
     <p>{{ infoText }}</p>
     <button
       class="button"
-      (click)="PCactive()"
+
       *ngIf="pcChoice && !move && !active && !winner"
     >
       Auswerten..
     </button>
     <button
-      (click)="computerTurn()"
+
       *ngIf="!pcChoice && !move && PCIsactive && !winner"
     >
       PC überlege..
     </button>
-    <button
+    <!--<button
       (click)="moveCards(this.cards_1, this.cards_2)"
       *ngIf="move && !PCIsactive && !winner"
     >
@@ -229,7 +231,7 @@
       *ngIf="move && PCIsactive && !winner"
     >
       Nächste Runde(PC)
-    </button>
+    </button>-->
   </div>
 
   <app-winnerscreen [winner]="winner" *ngIf="winner"></app-winnerscreen>
@@ -237,11 +239,11 @@
 
     [ngClass]="cardview?'in':'out'"
     class="mycards"
-    [cards]="cards_1"
+    [cards]="cards_1 | async"
     (click)="toggleCardView()"
   ></app-mycards>
   <app-footer></app-footer>
 </div>
 
-<app-players class="player-cont" *ngIf="!player"  (onPlayername)="setPlayer($event)"></app-players>
+<app-players class="player-cont" *ngIf="!game"  [cards]="cards" (closeChild)="getGameID($event)"  ></app-players>
 

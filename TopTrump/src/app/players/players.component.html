@@ -1,5 +1,5 @@
 <div class="name-cont">
-  <mat-form-field class="example-form-field">
+  <!--<mat-form-field class="example-form-field">
     <mat-label>Gib Deinen Name ein:</mat-label>
     <input matInput type="text" [(ngModel)]="value"  (click)="value=' '">
 
@@ -7,8 +7,21 @@
 
 
 
+  </mat-form-field>-->
+  <button class="button"mat-stroked-button (click)="generateGame()">Spiel generieren</button>
+  <mat-form-field class="example-form-field">
+    <mat-label>Gib die Spiel-ID ein:</mat-label>
+    <input matInput type="text" [(ngModel)]="value"  (click)="valueReset()" >
+
+
+
+
+
   </mat-form-field>
-  <button class="button"mat-stroked-button (click)="sendName()">Name loggen</button>
+  <button class="button"mat-stroked-button (click)="gameExists(value)">Spiel beitreten</button>
+  <p style="color: red;">{{ErrorID}}</p>
+
+
 </div>
 <button (click)="exit()" class="exit">x</button>
 

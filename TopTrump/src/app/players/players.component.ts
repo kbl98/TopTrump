@@ -8,7 +8,7 @@ import {MatCheckboxModule} from '@angular/material/checkbox';
 import {MatRadioModule} from '@angular/material/radio';
 import * as firebase from "firebase/app";
 
-import { collection, addDoc, setDoc,getDocs  } from "firebase/firestore";
+import { collection, addDoc, setDoc,getDocs,getDoc,doc  } from "firebase/firestore";
 
 //Now import this
 import 'firebase/firestore';
@@ -31,13 +31,106 @@ export class PlayersComponent implements OnInit{
   ngOnInit(): void {
 
   }
-  @Output() onPlayername = new EventEmitter<any>()
+
+  @Input()cards:any;
+  @Output() closeEvent = new EventEmitter<string>();
+
+
+  // Logik zum Schließen der Komponente und Übergeben der Game ID
+
   value="";
   selectedPlayer="";
   allPlayers:any=[];
   player:any;
+  cards_1:any;
+  cards_2:any;
+  ErrorID:any=""
 
-  async sendName(){
+  @Input()game:any=""
+  @Output() closeChild = new EventEmitter<any>();
+
+  closeComponent() {
+    const gameID = this.game; // Ersetze dies durch die tatsächliche Game ID
+
+
+  }
+
+  valueReset(){
+    this.value="";
+    this.ErrorID=""
+  }
+
+  async generateGame(){
+    interface Game {
+      players: [];
+      playerCards: { [key: string]: string[] };
+      p1_active: boolean;
+      p2_active: boolean;
+    }
+    await this.mixCards()
+    const gamesCollection = collection(this.fb, 'games');
+    try {
+      // Erstelle ein leeres Kartenarray für jeden Spieler
+
+      let player1:any="p1";
+      let player2:any="p2";
+      // Erstelle ein neues Spielobjekt
+      const newGame = {
+        players: [],
+        playerCards: {
+          [player1]: this.cards_1,
+          [player2]:this.cards_2,
+        },
+        activePlayer:"p1"
+      };
+
+      // Füge das neue Spiel zur "games"-Sammlung hinzu
+      const docRef = await addDoc(gamesCollection,newGame);
+      this.game=docRef.id
+      console.log('Neues Spiel erstellt mit ID:', docRef.id);
+      this.closeChild.emit(this.game);
+    } catch (error) {
+      console.error('Fehler beim Erstellen des Spiels:', error);
+    }
+  }
+
+  async gameExists(ID:any){
+    const gamesCollectionRef:any = collection(this.fb, 'games');
+    const gameDocRef = doc(gamesCollectionRef, ID);
+    try {
+      const gameDoc = await getDoc(gameDocRef);
+
+      if (gameDoc.exists()) {
+        console.log(`Das Spiel mit der ID ${ID} existiert.`);
+        this.game=ID;
+        this.closeChild.emit(this.game);
+      } else {
+        console.log(`Das Spiel mit der ID ${ID} existiert nicht.`);
+        this.ErrorID="Das Spiel mit der ID "+ID+ " existiert nicht."
+      }
+    } catch (error) {
+      console.error('Fehler beim Überprüfen des Spiels:', error);
+      this.ErrorID="Datenbank wird nicht erreicht.."
+    }
+  }
+
+
+  mixCards() {
+    this.cards_1 = [];
+    this.cards_2 = [];
+    this.cards.sort(() => Math.random() - 0.5);
+    console.log(this.cards_1);
+    for (let i = 0; i < this.cards.length; i++) {
+      if (i % 2 == 0 || i == 0) {
+        this.cards_1.push(this.cards[i]);
+      } else {
+        this.cards_2.push(this.cards[i]);
+      }
+    }
+    console.log('Ich habe ' + this.cards_1.length + ' Karten');
+  }
+
+ /* async sendName(){
     await this.getAllPlayers();
     console.log(this.allPlayers)
     let i=this.allPlayers.filter((p:any)=>{return this.value==p});
@@ -59,13 +152,13 @@ export class PlayersComponent implements OnInit{
     this.player=this.value;
     this.onPlayername.emit(this.player);
   }
-}
+}*/
 
 exit(){
   let cards_i = this.activatedRoute.snapshot.params['cards'];
   this.router.navigateByUrl('main/'+cards_i)
 }
-  async sendInfos(){
+/*  async sendInfos(){
 
 
     console.log(this.value);
@@ -94,9 +187,9 @@ exit(){
         console.log('Es gibt keine Benutzer in der "user"-Sammlung.');
       }
 
-    }
+    }*/
 
-    async getAllPlayers(){
+   /* async getAllPlayers(){
       const userCollection = collection(this.fb, 'user');
 
       // Hole alle Dokumente aus der 'user'-Sammlung
@@ -119,7 +212,7 @@ exit(){
 
       // Nachdem alle Namen abgerufen wurden, kannst du die Liste verwenden, wie du möchtest
       console.log('Alle Benutzernamen:', this.allPlayers);
-    }
+    }*/
 
 
   }

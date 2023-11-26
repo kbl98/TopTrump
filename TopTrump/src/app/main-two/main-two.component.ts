@@ -2,15 +2,19 @@ import { Component, Input, OnInit } from '@angular/core';
 import { Firestore } from '@angular/fire/firestore';
 import { ActivatedRoute, Router } from '@angular/router';
 import { Observable, Observer } from 'rxjs';
+import { BehaviorSubject } from 'rxjs';
+import { Card } from 'card_interface';
 import {
   collection,
+  doc,
   addDoc,
   setDoc,
   getDocs,
   query,
   where,
-  doc,
+  getDoc,
   updateDoc,
+  onSnapshot,
 } from 'firebase/firestore';
 
 @Component({
@@ -23,7 +27,9 @@ export class MainTwoComponent implements OnInit {
     private router: Router,
     private fb: Firestore,
     private activatedRoute: ActivatedRoute
-  ) {}
+  ) {
+    this.getMyCardsFb(this.me, this.antiplayer);
+  }
 
   ngOnInit(): void {
     let cards_i = this.activatedRoute.snapshot.params['cards'];
@@ -31,12 +37,24 @@ export class MainTwoComponent implements OnInit {
     this.getPokeCards().subscribe(() => {});
   }
 
+  // Methode, die aufgerufen wird, wenn die ChildComponent geschlossen wird
+  onChildClose(gameID: string) {
+    this.game = gameID;
+    // Hier kannst du weitere Logik implementieren, die auf die geschlossene Game ID reagiert
+  }
+
+  cards_1: BehaviorSubject<Card[]> = new BehaviorSubject<Card[]>([]);
+  cards_2: BehaviorSubject<Card[]> = new BehaviorSubject<Card[]>([]);
+  activePlayer: BehaviorSubject<String> = new BehaviorSubject<String>('');
+
   @Input() players: any = [];
   imageLoaded: boolean = false;
   cards: any = [];
 
-  cards_1: any = [];
-  cards_2: any = [];
+  /*cards_1: any = [];
+  cards_2: any = [];*/
+  myData: any = {};
+  me: any = '';
   open2 = false;
   open1 = false;
   winner = '';
@@ -60,17 +78,27 @@ export class MainTwoComponent implements OnInit {
   cardview: any = false;
   start_i: any = 1;
   stop_i: any = 50;
-  player: any;
+  game: any;
   playerlist: any = false;
   selectedPlayer = '';
   allPlayers: any = [];
   antiplayer: any = '';
 
-  setPlayer(player: any) {
+  /*setPlayer(player: any) {
     this.player = player;
+  }*/
+
+  getGameID(game: any) {
+    this.game = game;
   }
 
   async startGame() {
+    await this.getCardsFromFb();
+    await this.setActive('p1');
+    this.open1 = true;
+    this.getInfoTextChoose();
+    /*von main..:
+
     this.mixCards();
 
     this.open1 = true;
@@ -80,10 +108,10 @@ export class MainTwoComponent implements OnInit {
     this.PCIsactive = false;
     this.infoText =
       'Waehle die Eigenschaft Deiner (linken) Karte, mit der Du vergleichen möchtest..';
-    await this.getPokeCards();
+    await this.getPokeCards();*/
   }
 
-  mixCards() {
+  /*mixCards() {
     this.cards_1 = [];
     this.cards_2 = [];
     this.cards.sort(() => Math.random() - 0.5);
@@ -96,64 +124,72 @@ export class MainTwoComponent implements OnInit {
       }
     }
     console.log('Ich habe ' + this.cards_1.length + ' Karten');
-  }
+  }*/
 
   log(skill: any) {
-    if (this.active) {
-      this.active = false;
-      this.open2 = true;
-      this.checkCards(skill);
-    }
+    this.open2 = true;
+    this.checkCards(skill);
   }
 
-  checkCards(skill: string) {
+  checkCards(skill: any) {
+    let firstCard1: any = this.cards_1.value?.[0];
+    let firstCard2: any = this.cards_2.value?.[0];
     //this.showPcCard();
-    if (!this.PCIsactive) {
-      this.infoText =
-        'Du hast ' +
-        skill +
-        ' ' +
-        this.cards_1[0][skill] +
-        ' gewählt. Der PC hat hier ' +
-        this.cards_2[0][skill] +
-        '.';
-    } else {
-      this.infoText =
-        'Der PC hat ' +
-        skill +
-        ' ' +
-        this.cards_2[0][skill] +
-        ' gewählt. Du hast hier ' +
-        this.cards_1[0][skill] +
-        '.';
-    }
-    this.checkMyValue(skill);
 
-    this.checkPCValue(skill);
+    this.infoText =
+      'Du hast ' +
+      skill +
+      ' ' +
+      firstCard1[skill] +
+      ' gewählt. Gegenspieler hat hier ' +
+      firstCard2[skill] +
+      '.';
 
-    this.checkEqual(skill);
+    this.checkMyValue(skill, firstCard1, firstCard2);
+
+    //this.checkPCValue(skill);
+
+    //this.checkEqual(skill);
   }
+  checkMyValue(skill: any, c1: any, c2: any) {
+    console.log(Number(c1[skill]));
 
-  checkMyValue(skill: string) {
-    if (Number(this.cards_1[0][skill]) > Number(this.cards_2[0][skill])) {
-      this.pushEqualCards(this.cards_1);
+    if (c1 && c2 && Number(c1[skill]) > Number(c2[skill])) {
+      console.log(Number(c1[skill]));
+      //this.pushEqualCards(this.cards_1);
       //TextINFO!!!
-      this.infoText +=
-        this.cards_1[0][skill] + ' ist grösser ' + this.cards_2[0][skill];
-      this.PCIsactive = false;
+      this.infoText += Number(c1[skill]) + ' ist grösser ' + Number(c2[skill]);
+      //this.activePlayer = this.me;
+
       this.open2 = true;
 
       //this.active=true;
       this.move = true;
 
-      //this.moveCards(this.cards_1,this.cards_2)
+      this.moveCards(this.cards_1.value, this.cards_2.value);
 
       this.infoText += '. Du hast gestochen.';
-      this.pcChoice = '';
-      this.checkWinner();
+      this.setActive(this.me);
+      console.log(this.activePlayer);
+      //this.checkWinner();
+    } else if (c1 && c2 && Number(c2[skill]) > Number(c1[skill])) {
+      console.log(Number(c1[skill]));
+      this.infoText += Number(c2[skill]) + ' ist grösser ' + Number(c1[skill]);
+
+      this.open2 = true;
+
+      //this.active=true;
+      this.move = true;
+
+      this.moveCards(this.cards_1.value, this.cards_2.value);
+
+      this.infoText += '. Dein Gegner hat gestochen.';
+      this.setActive(this.antiplayer);
+      console.log(this.activePlayer.value);
+      //this.checkWinner();
     }
   }
-
+  /*
   checkPCValue(skill: string) {
     if (Number(this.cards_2[0][skill]) > Number(this.cards_1[0][skill])) {
       this.pushEqualCards(this.cards_2);
@@ -191,22 +227,27 @@ export class MainTwoComponent implements OnInit {
       this.checkCards(skill);
     }
   }
-
+*/
   moveCards(winner: any, loser: any) {
-    if (winner == this.cards_1) {
+    /*if (winner == this.cards_1) {
       this.active = true;
-    }
+    }*/
+    console.log(this.cards_1.value[0]);
+    console.log(this.cards_2.value[0]);
+    console.log(this.cards_1.value[1]);
+    console.log(this.cards_2.value[1]);
     winner.push(loser[0]);
     loser.shift();
     winner.push(winner[0]);
     winner.shift();
-
+    console.log(this.cards_1.value[0]);
+    console.log(this.cards_2.value[0]);
     this.open2 = false;
     this.move = false;
     this.infoText = '';
-    this.checkWinner();
+    //this.checkWinner();
   }
-
+  /*
   checkWinner() {
     if (this.cards_2.length == 0) {
       this.winner = 'Du hast ';
@@ -251,7 +292,7 @@ export class MainTwoComponent implements OnInit {
       winner.push(this.equalCards[i]);
     }
     this.equalCards = [];
-  }
+  }*/
 
   navigateOne() {
     let cards_i = this.activatedRoute.snapshot.params['cards'];
@@ -316,14 +357,14 @@ export class MainTwoComponent implements OnInit {
     });
   }
 
-  async getPlayers() {
+  /*async getPlayers() {
     if (this.playerlist == false) {
       await this.getAllPlayers();
       this.playerlist = true;
     } else {
       this.playerlist = false;
     }
-  }
+  }*/
 
   sendSelection() {
     console.log('Ausgewählter Spieler wird gesendet:' + this.selectedPlayer);
@@ -331,7 +372,7 @@ export class MainTwoComponent implements OnInit {
     let gameID = this.setGameID();
   }
 
-  async getAllPlayers() {
+  /* async getAllPlayers() {
     const userCollection = collection(this.fb, 'user');
 
     // Hole alle Dokumente aus der 'user'-Sammlung
@@ -355,7 +396,7 @@ export class MainTwoComponent implements OnInit {
 
     // Nachdem alle Namen abgerufen wurden, kannst du die Liste verwenden, wie du möchtest
     console.log('Alle Benutzernamen:', this.allPlayers);
-  }
+  }*/
 
   exitPlayers() {
     this.selectedPlayer = '';
@@ -398,6 +439,114 @@ const firstDoc = querySnapshot.docs[0];
     } catch (error) {
       console.error('Fehler beim Erstellen eines neuen Spiels:', error);
       throw error; // Optional: Fehler weiterwerfen, um ihn in der aufrufenden Funktion zu behandeln
+    }
+  }
+
+  async getCardsFromFb() {
+    const gamesCollectionRef: any = collection(this.fb, 'games');
+    const gameDocRef = doc(gamesCollectionRef, this.game);
+    try {
+      const gameDoc = await getDoc(gameDocRef);
+
+      if (gameDoc.exists()) {
+        const gameData = gameDoc.data();
+
+        if (gameData && gameData['players'][0]) {
+          console.log('p1 schon gesetzt. ');
+          this.me = 'p2';
+          this.antiplayer = 'p1';
+          console.log('Du bist Spieler p2');
+        } else if (
+          gameData &&
+          gameData['players'][0] &&
+          gameData['players'][1]
+        ) {
+          console.log('Alle Spieler bereits gesetzt...');
+        } else if (gameData && !gameData['players'][0]) {
+          console.log('Noch kein Spieler. Du bist p1');
+          this.me = 'p1';
+          this.antiplayer = 'p2';
+        } else {
+          console.log('Ein Fehler ist aufgetreten. Zurück zu Start..');
+          this.router.navigateByUrl('main');
+        }
+        this.getMyCardsFb(this.me, this.antiplayer);
+      }
+    } catch {}
+  }
+
+  async getMyCardsFb(me: any, anti: any) {
+    const gamesCollectionRef: any = await collection(this.fb, 'games');
+    const gameDocRef = await doc(gamesCollectionRef, this.game);
+
+    try {
+      /*const gameDoc = await getDoc(gameDocRef);
+
+      let gamedata=await gameDoc.data()
+      if (gamedata && gamedata["playerCards"] && gamedata["playerCards"][me] && gamedata["playerCards"][anti]){
+      this.cards_1=gamedata["playerCards"][me];
+      console.log('Meine Behavior-Karten:'+this.cards_1[0])
+      this.cards_2=gamedata["playerCards"][anti];*/
+
+      const onsub = onSnapshot(doc(this.fb, 'games', this.game), (doc) => {
+        this.myData = doc.data();
+        console.log(this.myData['playerCards'][this.me]);
+        let newCardsData1 = this.myData['playerCards'][this.me];
+        let newCardsData2 = this.myData['playerCards'][this.antiplayer];
+        let activePlayerData = this.myData['activePlayer'];
+        this.cards_1;
+
+        this.cards_1.next(newCardsData1);
+        this.cards_2.next(newCardsData2);
+        this.activePlayer.next(activePlayerData);
+      });
+
+      /*onSnapshot(gameDocRef, (snapshot) => {
+
+
+          const updatedGameData = doc.data();
+          if (updatedGameData && updatedGameData["playerCards"] && updatedGameData["playerCards"][me] && updatedGameData["playerCards"][anti]) {
+            this.cards_1.next(updatedGameData["playerCards"][me]);
+            this.cards_2.next(updatedGameData["playerCards"][anti]);
+
+            console.log(`Aktualisierte Karten von Spieler ${me}:`, this.cards_1);}
+
+        }*/
+    } catch {}
+  }
+  async setActive(player: any) {
+    const gamesCollectionRef: any = await collection(this.fb, 'games');
+    const gameDocRef = await doc(gamesCollectionRef, this.game);
+
+    try {
+      const gameDoc = await getDoc(gameDocRef);
+
+      if (gameDoc.exists()) {
+        // Holen Sie sich die aktuellen Daten
+        const currentGameData = gameDoc.data();
+
+        // Aktualisieren Sie das activePlayer-Feld
+        const updatedGameData = { ...currentGameData, activePlayer: player };
+
+        // Aktualisieren Sie das Firestore-Dokument
+        await updateDoc(gameDocRef, updatedGameData);
+
+        console.log('activePlayer aktualisiert:', player);
+      } else {
+        console.log('Dokument nicht gefunden:', this.game);
+      }
+    } catch (error) {
+      console.error('Fehler beim Aktualisieren des activePlayer:', error);
+    }
+  }
+
+  getInfoTextChoose() {
+    console.log(this.me);
+    console.log(this.activePlayer.value);
+    if (this.me == this.activePlayer.value) {
+      this.infoText = 'Wähle eine Eigenschaft..';
+    } else {
+      this.infoText = 'Dein Gegner wählt eine Eigenschaft..';
     }
   }
 }

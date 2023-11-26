@@ -1,4 +1,4 @@
-import { Component, Input } from '@angular/core';
+import { Component, Input, OnInit } from '@angular/core';
 
 @Component({
   selector: 'app-mycards',
@@ -7,10 +7,14 @@ import { Component, Input } from '@angular/core';
 
 
 })
-export class MycardsComponent {
+export class MycardsComponent implements OnInit{
   constructor() {}
 
 @Input() cards:any="";
+
+ngOnInit(): void {
+    console.log(this.cards)
+}
 
 firstCard(card:any){
   if(this.cards.length<=3){
