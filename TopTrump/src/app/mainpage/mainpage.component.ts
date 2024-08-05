@@ -10,6 +10,7 @@ import {
 import { MatButtonModule } from '@angular/material/button';
 import { MycardsComponent } from '../mycards/mycards.component';
 import { ActivatedRoute, Router } from '@angular/router';
+import { tap } from 'rxjs/operators';
 
 @Component({
   selector: 'app-mainpage',
@@ -20,15 +21,37 @@ export class MainpageComponent implements OnInit {
   constructor(
     private router:Router,
     public dialog: MatDialog,
-    private activatedRoute: ActivatedRoute
-  ) {}
+    private activatedRoute: ActivatedRoute,
 
-  ngOnInit(): void {
+
+
+
+) {
+}
+
+cardsLoaded:boolean=false;
+async ngOnInit(): Promise<void>{
+this.cardsLoaded=false;
     let cards_i = this.activatedRoute.snapshot.params['cards'];
     console.log(cards_i);
-    this.getPokeCards().subscribe(() => {});
-  }
 
+   /*this.getPokeCards().subscribe(() => {
+    console.log("Karten sind geladen:"+this.cardsLoaded)
+
+    });
+
+  }*/
+
+  this.getPokeCards().subscribe({
+    next: () => {
+      console.log("Next called, card array is growing");
+    },
+    complete: () => {
+      this.cardsLoaded = true;
+      console.log("Cards have been loaded");
+    }
+  });
+}
   imageLoaded: boolean = false;
   cards: any = [
     /*{
@@ -119,6 +142,9 @@ export class MainpageComponent implements OnInit {
   stop_i: any = 50;
 
   async startGame() {
+    console.log("startGame hat geladene Karten"+this.cardsLoaded)
+    if(this.cardsLoaded){
+    console.log(this.cards.length)
     this.mixCards();
     this.open1 = true;
     this.open2 = false;
@@ -127,14 +153,15 @@ export class MainpageComponent implements OnInit {
     this.PCIsactive = false;
     this.infoText =
       'Waehle die Eigenschaft Deiner (linken) Karte, mit der Du vergleichen möchtest..';
-    await this.getPokeCards();
-  }
+    //await this.getPokeCards();
+  }}
 
   mixCards() {
+    console.log("Es sind"+this.cards.length+"Karten zu verteilen.")
     this.cards_1 = [];
     this.cards_2 = [];
-    this.cards.sort(() => Math.random() - 0.5);
-    console.log(this.cards_1);
+   this.cards.sort(() => Math.random() - 0.5);
+    console.log("Du hast jetzt"+this.cards_1.length);
     for (let i = 0; i < this.cards.length; i++) {
       if (i % 2 == 0 || i == 0) {
         this.cards_1.push(this.cards[i]);
@@ -243,7 +270,7 @@ export class MainpageComponent implements OnInit {
 
       this.infoText += '. Du hast gestochen.';
       this.pcChoice = '';
-      this.checkWinner();
+      setTimeout(this.checkWinner,3000);
     }
   }
 
@@ -263,6 +290,7 @@ export class MainpageComponent implements OnInit {
       this.infoText += '. Der PC hat gestochen.';
 
       this.pcChoice = '';
+      setTimeout(this.checkWinner,3000);
       if (!this.checkWinner()) {
         this.PCIsactive = true;
         //this.computerTurn()
@@ -385,54 +413,63 @@ export class MainpageComponent implements OnInit {
 
 }*/
 
-  getPokeCards(): Observable<void> {
-    return new Observable<void>((observer: Observer<void>) => {
-      const fetchPokemon = async () => {
-        let cards_i = await this.activatedRoute.snapshot.params['cards'];
-        let end = Number(cards_i) + 49;
+getPokeCards(): Observable<void> {
+  return new Observable<void>((observer: Observer<void>) => {
+    const fetchPokemon = async () => {
+      let cards_i = await this.activatedRoute.snapshot.params['cards'];
+      let end = Number(cards_i) + 49;
 
-        for (let i = cards_i; i <= end; i++) {
-          let url_poke = await fetch('https://pokeapi.co/api/v2/pokemon/' + i);
-          let pokemon = await url_poke.json();
-          console.log(pokemon);
-          console.log('Name: ' + pokemon['name']);
-          //for(let j=0;j>7;j++){
-          // console.log("Zusatz:"+pokemon.stats[0]["base_stat"]["stat"]["name"]+":"+pokemon.stats[0]["base_stat"])
-          // }
+      while (this.cards.length < 40) {
+        let j=Math.floor(Math.random()*1001)
+        let url_poke = await fetch('https://pokeapi.co/api/v2/pokemon/' + j);
+        let pokemon = await url_poke.json();
+        //console.log(pokemon);
+        //console.log('Name: ' + pokemon['name']);
+        //for(let j=0;j>7;j++){
+        // console.log("Zusatz:"+pokemon.stats[0]["base_stat"]["stat"]["name"]+":"+pokemon.stats[0]["base_stat"])
+        // }
 
-          console.log(
-            pokemon['stats'][0]['stat']['name'] +
-              ':' +
-              pokemon['stats'][0]['base_stat']
-          );
-          let newCard: any = {
-            name: pokemon['name'].toUpperCase(),
-            //experience: pokemon['base_experience'],
-            Gewicht: pokemon['weight'] / 10,
-            //height: pokemon['height'],
-            moves: pokemon['moves'].length,
-            hp: pokemon['stats'][0]['base_stat'],
-            Attacke: pokemon['stats'][1]['base_stat'],
-            Verteidigung: pokemon['stats'][2]['base_stat'],
-            'Spez_Attacke': pokemon['stats'][3]['base_stat'],
-            'Spez_Verteidigung': pokemon['stats'][4]['base_stat'],
-            Geschwindigkeit: pokemon['stats'][5]['base_stat'],
-            src: pokemon['sprites']['other']['official-artwork'][
-              'front_default'
-            ],
-          };
+        console.log(
+          pokemon['stats'][0]['stat']['name'] +
+            ':' +
+            pokemon['stats'][0]['base_stat']
+        );
+        let newCard: any = {
+          name: pokemon['name'].toUpperCase(),
+          //experience: pokemon['base_experience'],
+          Gewicht: pokemon['weight'] / 10,
+          //height: pokemon['height'],
+          moves: pokemon['moves'].length,
+          hp: pokemon['stats'][0]['base_stat'],
+          Attacke: pokemon['stats'][1]['base_stat'],
+          Verteidigung: pokemon['stats'][2]['base_stat'],
+          'Spez_Attacke': pokemon['stats'][3]['base_stat'],
+          'Spez_Verteidigung': pokemon['stats'][4]['base_stat'],
+          Geschwindigkeit: pokemon['stats'][5]['base_stat'],
+          src: pokemon['sprites']['other']['official-artwork'][
+            'front_default'
+          ],
+        };
+        //this.cards.push(newCard);
+        // Add card only if it is not already in the array
+        if (!this.cards.some((card:any) => card.name === newCard.name)) {
           this.cards.push(newCard);
-          console.log(this.cards);
+          //console.log("Du hast " + newCard['name']);
+      }
+        //console.log("Du hast"+newCard['name']);
 
-          if (i === cards_i + 50) {
-            observer.next();
-            observer.complete();
-          }
-        }
-      };
-      fetchPokemon();
-    });
-  }
+        //if (i === cards_i + 50) {
+
+        //}
+      }
+      observer.next();
+          observer.complete();
+    };
+    fetchPokemon();
+
+
+  });
+}
 
   navigateTwo(){
     let cards_i = this.activatedRoute.snapshot.params['cards'];

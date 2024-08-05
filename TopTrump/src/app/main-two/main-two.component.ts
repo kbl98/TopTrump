@@ -160,13 +160,14 @@ export class MainTwoComponent implements OnInit {
       //TextINFO!!!
       this.infoText += Number(c1[skill]) + ' ist grösser ' + Number(c2[skill]);
       //this.activePlayer = this.me;
-
+      let cards1=JSON.stringify(this.cards_1.value);
+      let cards2=JSON.stringify(this.cards_2.value);
       this.open2 = true;
-
+      console.log("Karten vor move: "+ JSON.stringify(this.cards_2.value))
       //this.active=true;
       this.move = true;
 
-      this.moveCards(this.cards_1.value, this.cards_2.value);
+      this.moveCards(cards1, cards2,"1" );
 
       this.infoText += '. Du hast gestochen.';
       this.setActive(this.me);
@@ -177,13 +178,15 @@ export class MainTwoComponent implements OnInit {
       this.infoText += Number(c2[skill]) + ' ist grösser ' + Number(c1[skill]);
 
       this.open2 = true;
-
+      let cards1=JSON.stringify(this.cards_1.value);
+      let cards2=JSON.stringify(this.cards_2.value);
       //this.active=true;
       this.move = true;
-
-      this.moveCards(this.cards_1.value, this.cards_2.value);
+      console.log("Karten vor move: "+ JSON.stringify(this.cards_2.value))
+     this.moveCards(cards2, cards1,"2");
 
       this.infoText += '. Dein Gegner hat gestochen.';
+
       this.setActive(this.antiplayer);
       console.log(this.activePlayer.value);
       //this.checkWinner();
@@ -228,23 +231,44 @@ export class MainTwoComponent implements OnInit {
     }
   }
 */
-  moveCards(winner: any, loser: any) {
+  moveCards(winner: any, loser: any,win:any) {
+    console.log("Start move")
+
+    console.log("Loser loser:"+loser)
+
+    let winnerJson=JSON.parse(winner)
+    let loserJson=JSON.parse(loser)
+
     /*if (winner == this.cards_1) {
       this.active = true;
     }*/
-    console.log(this.cards_1.value[0]);
+    /*console.log(this.cards_1.value[0]);
     console.log(this.cards_2.value[0]);
     console.log(this.cards_1.value[1]);
-    console.log(this.cards_2.value[1]);
-    winner.push(loser[0]);
+    console.log(this.cards_2.value[1]);*/
+   winnerJson.push(loserJson[0]);
+    loserJson.shift();
+    winnerJson.push(winnerJson[0]);
+    winnerJson.shift();
+
+    console.log("Länge1: "+winnerJson.length)
+    console.log("Länge2: "+loserJson.length)
+
+    /*winner.push(loser[0]);
     loser.shift();
     winner.push(winner[0]);
-    winner.shift();
-    console.log(this.cards_1.value[0]);
-    console.log(this.cards_2.value[0]);
+    winner.shift();*/
+
+    if(win==1){
+      this.updateCards(winnerJson,loserJson)
+    }
+    if(win==2){
+      this.updateCards(loserJson,winnerJson)
+    }
+
     this.open2 = false;
     this.move = false;
-    this.infoText = '';
+    //this.infoText = '';
     //this.checkWinner();
   }
   /*
@@ -492,6 +516,7 @@ const firstDoc = querySnapshot.docs[0];
         this.myData = doc.data();
         console.log(this.myData['playerCards'][this.me]);
         let newCardsData1 = this.myData['playerCards'][this.me];
+        console.log("Type Cards from FB:"+typeof(newCardsData1))
         let newCardsData2 = this.myData['playerCards'][this.antiplayer];
         let activePlayerData = this.myData['activePlayer'];
         this.cards_1;
@@ -538,6 +563,53 @@ const firstDoc = querySnapshot.docs[0];
     } catch (error) {
       console.error('Fehler beim Aktualisieren des activePlayer:', error);
     }
+  }
+
+  async updateCards(cards1:any,cards2:any){
+
+
+    console.log("cards1: "+cards1)
+    console.log('start update cards')
+    const gamesCollectionRef: any = await collection(this.fb, 'games');
+    const gameDocRef = await doc(gamesCollectionRef, this.game);
+    console.log("Karten für update: "+cards1.length)
+    console.log("Karten für update: "+cards2.length)
+
+    try {
+      const gameDoc = await getDoc(gameDocRef);
+
+      if (gameDoc.exists()) {
+        // Holen Sie sich die aktuellen Daten
+        const currentGameData = gameDoc.data();
+        console.log(currentGameData)
+        // Aktualisieren Sie das activePlayer-Feld
+
+        console.log("Karten für update: "+typeof(JSON.parse(JSON.stringify(cards1))))
+        console.log("Karten für update: "+cards2.length)
+        // Aktualisieren Sie das Firestore-Dokument
+        //await updateDoc(gameDocRef, updatedGameData);
+        let pl1=this.me
+        let pl2=this.antiplayer
+const updatedGameData = { ...currentGameData,
+  playerCards: {
+    ...currentGameData["playerCards"],
+    pl1:cards1,
+    pl2:cards2,
+    activePlayer:this.activePlayer.value
+  }};
+  console.log("Karten für update: "+cards1.length)
+  console.log("Karten für update: "+cards2.length)
+  console.log(updatedGameData)
+  await updateDoc(gameDocRef, updatedGameData);
+        console.log('Game aktualisiert:', updatedGameData);
+      } else {
+        console.log('Dokument nicht gefunden:', this.game);
+      }
+    } catch (error) {
+      console.error('Fehler beim Aktualisieren des activePlayer:', error);
+   // }
+  }
+  console.log("Neue Values: "+this.cards_1.value.length+ this.cards_2.value.length)
   }
 
   getInfoTextChoose() {
